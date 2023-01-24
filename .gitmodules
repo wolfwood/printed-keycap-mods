@@ -1,0 +1,3 @@
+[submodule "LPX"]
+	path = LPX
+	url = git@github.com:levpopov/LPX.git
