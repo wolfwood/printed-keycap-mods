@@ -1,4 +1,4 @@
 keyboard = "santoku";
 
-grid_spacing = [55,65];
+grid_spacing = [54,66];
 grid_stagger = true;
