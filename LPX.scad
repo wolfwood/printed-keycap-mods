@@ -1,5 +1,5 @@
 include <util.scad>
-include <santoku_spacing.scad>
+include <trackpoint_notch.scad>
 
 module LPX() {
   translate([-1.605,-29.001/*-28.96958*/,-9.02 + 2.7644])
@@ -7,7 +7,7 @@ module LPX() {
 }
 
 module printable() {
-  rotate([0,0,45]) rotate([-48.5,0,0]) rotate([0,0,-90]) children();
+  rotate([0,0,-135]) rotate([-48.5,0,0]) rotate([0,0,-90]) children();
 }
 
 // LPX is symmetrical so the notch on lower right is the same as upper left
