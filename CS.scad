@@ -13,8 +13,14 @@ module CS(type="R3") {
 }
 
 module printable(other=false) {
-  rotate([0,0,other ? -45 : 135])
-    rotate([0,(other ? 1 : -1)*45,0]) children();
+  difference(){
+    rotate([0,0,other ? -45 : 135])
+      rotate([0,(other ? 1 : -1)*45,0]) children();
+
+    // nip off the edge so the keycap sticks better to the print bed
+    h=5;
+    translate([0,0,-h/2 - 5.6]) cube([40,40,h], center=true);
+  }
 }
 
 index = false;
