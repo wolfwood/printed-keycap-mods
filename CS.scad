@@ -9,6 +9,17 @@ module CS(type="R3") {
     import("levs-CS/r3-homing.stl");
   } else if (type == "R2") {
     rotate([0,0, 180]) import("levs-CS/r2r4-topbottom-rows.stl");
+  } else if (type == "R4") {
+    import("levs-CS/r2r4-topbottom-rows.stl");
+  } else if (type == "R2L") {
+    import("levs-CS/r2r4-side-columns.stl");
+  } else if (type == "R3L") {
+    //rotate([0,0, 180])
+      import("levs-CS/r3-side-columns.stl");
+  } else if (type == "R4L") {
+    mirror([0,1,0]) import("levs-CS/r2r4-side-columns.stl");
+  } else {
+    assert(false, str("unrecognized Chicago Steno keycap type: ", type));
   }
 }
 
