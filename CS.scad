@@ -35,6 +35,9 @@ module printable(other=false) {
     // nip off the edge so the keycap sticks better to the print bed
     h=5;
     translate([0,0,-h/2 - 5.6]) cube([40,40,h], center=true);
+    //rotate([0,(other ? -1 : 1)*45,0])
+    rotate([0,90,-45])
+    translate([0,0,-h/2 - 5.6]) cube([40,40,h], center=true);
   }
 }
 
