@@ -3,7 +3,7 @@ include <settings.scad>
 module trackpoint_notch(far=false, index=false) {
   if (keyboard == "santoku") {
     _key_spacing = 19;
-    _column_offset = 2;
+    _column_offset = 1;
     trackpoint_notch_helper(far=far, index=index, key_spacing=_key_spacing, column_offset=_column_offset) children();
   } else if(keyboard == "ortho-mx") {
     _key_spacing = 19.05;
