@@ -16,10 +16,10 @@ things/LPX-$(KEYBOARD).stl: LPX.scad
 	openscad -q --hardwarnings --render  -d .lpx.depends -o $@ $<
 
 things/CS-$(KEYBOARD)-middle-array.stl: CS.scad
-	openscad -q --hardwarnings --render  -d .cs-middle.depends -Dindex=false -o $@ $<
+	OPENSCADPATH=PseudoMakeMeKeyCapProfiles openscad -q --render  -d .cs-middle.depends -Dindex=false -o $@ $<
 
 things/CS-$(KEYBOARD)-index-array.stl: CS.scad
-	openscad -q --hardwarnings --render -d .cs-index.depends -Dindex=true -o $@ $<
+	OPENSCADPATH=PseudoMakeMeKeyCapProfiles openscad -q --render -d .cs-index.depends -Dindex=true -o $@ $<
 
 clean:
 	-rm .*.depends things/*.stl

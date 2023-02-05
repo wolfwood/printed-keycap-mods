@@ -2,7 +2,47 @@ include <util.scad>;
 include <trackpoint_notch.scad>;
 include <settings.scad>;
 
+use <CS-bindings/sculpted.scad>;
+use <CS-bindings/thumb.scad>;
+use <CS-bindings/convex.scad>;
+
+prerendered=false;
+
 module CS(type="R3") {
+  if (prerendered) {
+    CS_prerendered(type);
+  } else {
+    CS_from_source(type);
+  }
+}
+
+module CS_from_source(type="R3") {
+  if (type == "R3") {
+    sculpted_key(type);
+  } else if (type == "homing") {
+    sculpted_key("R3", homing=true);
+  } else if (type == "R2") {
+    sculpted_key(type);
+  } else if (type == "R4") {
+    mirror([0,1,0]) sculpted_key("R2");
+  } else if (type == "R2L") {
+    thumb_key(type);
+  } else if (type == "R3L") {
+    thumb_key(type);
+  } else if (type == "R4L") {
+    mirror([1,0,0]) thumb_key("R2L");
+  } else if (type == "T1L") {
+    thumb_key("T1");
+  } else if (type == "T1R") {
+    mirror([1,0,0]) thumb_key("T1");
+  } else if (type == "R3x") {
+    convex_key(type);
+  } else {
+    assert(false, str("unrecognized Chicago Steno keycap type: ", type));
+  }
+}
+
+module CS_prerendered(type="R3") {
   if (type == "R3") {
     import("levs-CS/r3-middle-row.stl");
   } else if (type == "homing") {
