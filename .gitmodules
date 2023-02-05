@@ -1,3 +1,6 @@
 [submodule "LPX"]
 	path = LPX
-	url = git@github.com:levpopov/LPX.git
+	url = https://github.com/levpopov/LPX.git
+[submodule "PseudoMakeMeKeyCapProfiles"]
+	path = PseudoMakeMeKeyCapProfiles
+	url = https://github.com/wolfwood/PseudoMakeMeKeyCapProfiles.git
