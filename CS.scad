@@ -18,6 +18,10 @@ module CS(type="R3") {
       import("levs-CS/r3-side-columns.stl");
   } else if (type == "R4L") {
     mirror([0,1,0]) import("levs-CS/r2r4-side-columns.stl");
+  } else if (type == "T1L") {
+    rotate([0,0, 180]) mirror([1,0,0]) import("levs-CS/thumb-1u.stl");
+  } else if (type == "T1R") {
+    import("levs-CS/thumb-1u.stl");
   } else {
     assert(false, str("unrecognized Chicago Steno keycap type: ", type));
   }
@@ -30,6 +34,9 @@ module printable(other=false) {
 
     // nip off the edge so the keycap sticks better to the print bed
     h=5;
+    translate([0,0,-h/2 - 5.6]) cube([40,40,h], center=true);
+    //rotate([0,(other ? -1 : 1)*45,0])
+    rotate([0,90,-45])
     translate([0,0,-h/2 - 5.6]) cube([40,40,h], center=true);
   }
 }
