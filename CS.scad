@@ -102,3 +102,19 @@ if (is_undef(keycap)) {
 } else {
   printable() CS(keycap);
 }
+
+if (debug_orientation) {
+  grid_stagger = false;
+  !let(x_spacing = is_list(grid_spacing) ? grid_spacing.x : grid_spacing, y_spacing = is_list(grid_spacing) ? grid_spacing.y : grid_spacing, stagger = is_undef(grid_stagger) ? 0 : grid_stagger ? y_spacing/2 : 0) {
+    one = "T1L";
+    two= "T1R";
+    CS_from_source(two);
+    translate([0,y_spacing,0]) CS_from_source(one);
+    translate([x_spacing,stagger,0]) printable() CS_from_source(two);
+    translate([x_spacing,stagger+y_spacing,0]) printable() CS_prerendered(one);
+    translate([2*x_spacing,stagger,0]) printable() CS_prerendered(two);
+    translate([2*x_spacing,stagger+y_spacing,0]) printable() CS_prerendered(one);
+    translate([3*x_spacing,stagger,0]) CS_prerendered(two);
+    translate([3*x_spacing,stagger+y_spacing,0]) CS_prerendered(one);
+  }
+}
