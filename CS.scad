@@ -19,18 +19,20 @@ module CS(type="R3") {
 module CS_from_source(type="R3") {
   if (type == "R3") {
     sculpted_key(type);
-  } else if (type == "homing") {
+  } else if (type == "R3-homing") {
     sculpted_key("R3", homing=true);
   } else if (type == "R2") {
     sculpted_key(type);
   } else if (type == "R4") {
     mirror([0,1,0]) sculpted_key("R2");
-  } else if (type == "R2L") {
-    thumb_key(type);
-  } else if (type == "R3L") {
-    thumb_key(type);
-  } else if (type == "R4L") {
-    mirror([1,0,0]) thumb_key("R2L");
+  } else if (type == "R2L" || type == "R4R") {
+    mirror([1,0,0]) thumb_key(type);
+  } else if (type == "R3L" || type == "R3R") {
+    // smoother feel if you don't print with the curved side at the top
+    rotate([0,0,180]) thumb_key(type);
+  } else if (type == "R4L" || type == "R2R") {
+    // smoother feel if you don't print with the curved side at the top
+    rotate([0,0,180]) thumb_key("R2L");
   } else if (type == "T1L") {
     thumb_key("T1");
   } else if (type == "T1R") {
@@ -86,12 +88,12 @@ index = false;
 if (is_undef(keycap)) {
   let(x_spacing = is_list(grid_spacing) ? grid_spacing.x : grid_spacing, y_spacing = is_list(grid_spacing) ? grid_spacing.y : grid_spacing, stagger = is_undef(grid_stagger) ? 0 : grid_stagger ? y_spacing/2 : 0) {
     if (!index) { // middle
-      printable() trackpoint_notch(far=true) CS("homing");
+      printable() trackpoint_notch(far=true) CS("R3-homing");
       translate([0,y_spacing,0]) printable() trackpoint_notch(far=false) CS("R2");
       translate([x_spacing,stagger,0]) printable(true) mirror([1,0,0]) trackpoint_notch(far=false, index=true) CS("R3");
       translate([x_spacing,stagger+y_spacing,0]) printable(true) mirror([1,0,0]) trackpoint_notch(far=true, index=true) CS("R2");
     } else { // index
-      printable(true) mirror([1,0,0]) trackpoint_notch(far=false, index=true) CS("homing");
+      printable(true) mirror([1,0,0]) trackpoint_notch(far=false, index=true) CS("R3-homing");
       translate([0,y_spacing,0]) printable(true) mirror([1,0,0]) trackpoint_notch(far=true, index=true) CS("R2");
       translate([x_spacing,stagger,0]) printable() trackpoint_notch(far=true, index=false) CS("R3");
       translate([x_spacing,stagger+y_spacing,0]) printable() trackpoint_notch(far=false, index=false) CS("R2");
