@@ -35,3 +35,13 @@ The main issue I've had has been with the bottom edge of the keycap partially or
 
 # Suggestions Welcome!
 Please open an issue to request support for new keycaps, new keyboards, flexibility in selecting row variants, etc. I'd like to expand this tool to accommodate as many uses as possible.
+
+# TODO
+  - [ ] fix orientation of 'from source' CS keycaps
+  - [ ] check if LPX needs 2 different notches now that santoku offset is corrected
+  - [ ] reorg related keycap code into directories
+  - [ ] means to specify arbitrary arrays of keycaps (in settings/from render command)
+    - [ ] split array generation off from main keycap files (can be generic? or per-profile?)
+  - [ ] means to generate individual trackpoint notched keycaps, not in an array
+    - [ ] communicate trackpoint notch location in a more clear and universal manner
+  - [ ] way to add sprues to keycap arrays for commercial 3D printing? what about shrinkage?
