@@ -32,4 +32,4 @@ things/CS-%.stl: CS.scad
 	OPENSCADPATH=PseudoMakeMeKeyCapProfiles openscad -q --render -d .cs-$*.depends -Dkeycap=\"$*\" -o $@ $<
 
 clean:
-	-rm .*.depends things/*.stl
+	-rm .*.depends $(CS_TARGETS) things/CS-$(KEYBOARD)-middle-array.stl things/CS-$(KEYBOARD)-index-array.stl things/LPX-$(KEYBOARD).stl
