@@ -76,10 +76,10 @@ module printable(other=false) {
 
     // nip off the edge so the keycap sticks better to the print bed
     h=5;
-    translate([0,0,-h/2 - 5.6]) cube([40,40,h], center=true);
-    //rotate([0,(other ? -1 : 1)*45,0])
+    cut_distance=4.9; // 5.6 is minimally invasive, but not as effective
+    translate([0,0,-h/2 - cut_distance]) cube([40,40,h], center=true);
     rotate([0,90,-45])
-    translate([0,0,-h/2 - 5.6]) cube([40,40,h], center=true);
+      translate([0,0,-h/2 - cut_distance]) cube([40,40,h], center=true);
   }
 }
 
