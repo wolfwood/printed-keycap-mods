@@ -24,7 +24,6 @@ If using a keycap array .stl, split the model to objects in your slicer, then en
 The main issue I've had has been with the bottom edge of the keycap partially or full detaching during the print. The support tweaks are meant to address this issue, along with the model modifications to flatten the edges the keycap rests on while printing.
 
   - *0% infill* - Lev said this helps with surface smoothness
-  - *Outer perimeters first* - helps keep the surface smooth? I've done this for better dimensional accuracy elsewhere but haven't done a good AB test here.
   - *enable supports* this thing is gonna tip over if you don't! the following are for traditional supports. tree supports are not effective. the whole model benefits from a solid support structure.
     - *Top contact Z distance* = 0.10 - get supports closer to the part
 	- *Pattern spacing* = 1.5 - more supportive
