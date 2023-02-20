@@ -6,7 +6,7 @@ use <CS-bindings/sculpted.scad>;
 use <CS-bindings/thumb.scad>;
 use <CS-bindings/convex.scad>;
 
-prerendered=false;
+prerendered=true;
 
 module CS(type="R3") {
   if (prerendered) {
