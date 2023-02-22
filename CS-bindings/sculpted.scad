@@ -3,7 +3,7 @@ use <../PseudoMakeMeKeyCapProfiles/Choc_Chicago_Steno.scad>;
 module sculpted_key(key="R3", homing=false) {
   keyID = key == "R2" ? 0 :
     key == "R3" ? 1 :
-    assert(false, str("invalid CS thumb key ID: ", key));
+    assert(false, str("invalid CS key ID: ", key));
 
   keycap(keyID   = keyID, //change profile refer to KeyParameters Struct
 	 cutLen  = 0, //Don't change. for chopped caps
