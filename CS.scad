@@ -54,12 +54,12 @@ module CS_prerendered(type="R3") {
   } else if (type == "R4") {
     import("levs-CS/r2r4-topbottom-rows.stl");
   } else if (type == "R2L") {
-    import("levs-CS/r2r4-side-columns.stl");
+    import("levs-CS/r2r4L-side-columns.stl");
   } else if (type == "R3L") {
     //rotate([0,0, 180])
-      import("levs-CS/r3-side-columns.stl");
+      import("levs-CS/r3L-side-columns.stl");
   } else if (type == "R4L") {
-    mirror([0,1,0]) import("levs-CS/r2r4-side-columns.stl");
+    mirror([0,1,0]) import("levs-CS/r2r4L-side-columns.stl");
   } else if (type == "T1L") {
     rotate([0,0, 180]) mirror([1,0,0]) import("levs-CS/thumb-1u.stl");
   } else if (type == "T1R") {
