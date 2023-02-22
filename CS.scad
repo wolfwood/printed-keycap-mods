@@ -47,7 +47,7 @@ module CS_from_source(type="R3") {
 module CS_prerendered(type="R3") {
   if (type == "R3") {
     import("levs-CS/r3-middle-row.stl");
-  } else if (type == "homing") {
+  } else if (type == "R3-homing") {
     import("levs-CS/r3-homing.stl");
   } else if (type == "R2") {
     rotate([0,0, 180]) import("levs-CS/r2r4-topbottom-rows.stl");
