@@ -1,3 +1,4 @@
+OPENSCAD=openscad
 KEYBOARD != perl -n -e'/^keyboard\s*=\s*"(\S+)"/ && print $$1' < settings.scad
 
 all: lpx cs-middle cs-index
@@ -17,19 +18,27 @@ CS_TARGETS=$(addsuffix .stl,$(addprefix things/CS-,$(CS_PROFILE)))
 
 cs: $(CS_TARGETS)
 
+CS.scad: PseudoMakeMeKeyCapProfiles/skin.scad PseudoMakeMeKeyCapProfiles/sweep.scad
+
 -include .*.depends
 
 things/LPX-$(KEYBOARD).stl: LPX.scad
-	openscad -q --hardwarnings --render  -d .lpx.depends -o $@ $<
+	$(OPENSCAD) -q --hardwarnings --render  -d .lpx.depends -o $@ $<
 
 things/CS-$(KEYBOARD)-middle-array.stl: CS.scad
-	OPENSCADPATH=PseudoMakeMeKeyCapProfiles openscad -q --render  -d .cs-middle.depends -Dindex=false -o $@ $<
+	$(OPENSCAD) -q --render  -d .cs-middle.depends -Dindex=false -o $@ $<
 
 things/CS-$(KEYBOARD)-index-array.stl: CS.scad
-	OPENSCADPATH=PseudoMakeMeKeyCapProfiles openscad -q --render -d .cs-index.depends -Dindex=true -o $@ $<
+	$(OPENSCAD) -q --render -d .cs-index.depends -Dindex=true -o $@ $<
 
 things/CS-%.stl: CS.scad
-	OPENSCADPATH=PseudoMakeMeKeyCapProfiles openscad -q --render -d .cs-$*.depends -Dkeycap=\"$*\" -o $@ $<
+	$(OPENSCAD) -q --render -d .cs-$*.depends -Dkeycap=\"$*\" -o $@ $<
+
+PseudoMakeMeKeyCapProfiles/skin.scad: PseudoMakeMeKeyCapProfiles/list-comprehension-demos/skin.scad
+	cp $< $@
+
+PseudoMakeMeKeyCapProfiles/sweep.scad: PseudoMakeMeKeyCapProfiles/list-comprehension-demos/sweep.scad
+	cp $< $@
 
 clean:
 	-rm .*.depends $(CS_TARGETS) things/CS-$(KEYBOARD)-middle-array.stl things/CS-$(KEYBOARD)-index-array.stl things/LPX-$(KEYBOARD).stl
