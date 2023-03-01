@@ -101,8 +101,10 @@ if (is_undef(keycap)) {
     } else { // index
       printable(true) mirror([1,0,0]) trackpoint_notch(far=false, index=true) CS("R3-homing");
       translate([0,y_spacing,0]) printable(true) mirror([1,0,0]) trackpoint_notch(far=true, index=true) CS("R2");
-      translate([x_spacing,stagger,0]) printable() trackpoint_notch(far=true, index=false) CS("R3");
-      translate([x_spacing,stagger+y_spacing,0]) printable() trackpoint_notch(far=false, index=false) CS("R2");
+      //translate([x_spacing,stagger,0]) printable() trackpoint_notch(far=true, index=false) CS("R3");
+      //translate([x_spacing,stagger+y_spacing,0]) printable() trackpoint_notch(far=false, index=false) CS("R2");
+      translate([x_spacing,stagger,0]) printable(other=true) trackpoint_notch(far=true, index=false) rotate([0,0,180]) CS("R3L");
+      translate([x_spacing,stagger+y_spacing,0]) printable(other=true) trackpoint_notch(far=false, index=false) rotate([0,0,180]) CS("R2L");
     }
   }
 } else {
