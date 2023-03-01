@@ -1,7 +1,7 @@
 use <../PseudoMakeMeKeyCapProfiles/Choc_Chicago_Steno.scad>;
 
 module sculpted_key(key="R3", homing=false) {
-  keyID = key == "R2" ? 0 :
+  keyID = key == "R2" || key == "R4" ? 0 :
     key == "R3" ? 1 :
     assert(false, str("invalid CS key ID: ", key));
 

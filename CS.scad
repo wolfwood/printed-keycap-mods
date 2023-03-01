@@ -6,7 +6,7 @@ use <CS-bindings/sculpted.scad>;
 use <CS-bindings/thumb.scad>;
 use <CS-bindings/convex.scad>;
 
-prerendered=true;
+prerendered=false;
 
 module CS(type="R3") {
   if (prerendered) {
@@ -17,24 +17,27 @@ module CS(type="R3") {
 }
 
 module CS_from_source(type="R3") {
+  $fn=60;
+
   if (type == "R3") {
     sculpted_key(type);
   } else if (type == "R3-homing") {
     sculpted_key("R3", homing=true);
   } else if (type == "R2") {
-    sculpted_key(type);
+    mirror([0,1,0]) sculpted_key("R4");
   } else if (type == "R4") {
-    mirror([0,1,0]) sculpted_key("R2");
+    sculpted_key(type);
   } else if (type == "R2L" || type == "R4R") {
-    mirror([1,0,0]) thumb_key(type);
+    mirror([1,0,0]) thumb_key("R2L");
   } else if (type == "R3L" || type == "R3R") {
     // smoother feel if you don't print with the curved side at the top
-    rotate([0,0,180]) thumb_key(type);
+    rotate([0,0,180]) thumb_key("R3L");
   } else if (type == "R4L" || type == "R2R") {
     // smoother feel if you don't print with the curved side at the top
     rotate([0,0,180]) thumb_key("R2L");
   } else if (type == "T1L") {
-    thumb_key("T1");
+    // smoother feel if you don't print with the curved side at the top
+    rotate([0,0,180]) thumb_key("T1");
   } else if (type == "T1R") {
     mirror([1,0,0]) thumb_key("T1");
   } else if (type == "R3x") {
@@ -53,17 +56,20 @@ module CS_prerendered(type="R3") {
     rotate([0,0, 180]) import("levs-CS/r2r4-topbottom-rows.stl");
   } else if (type == "R4") {
     import("levs-CS/r2r4-topbottom-rows.stl");
-  } else if (type == "R2L") {
+  } else if (type == "R2L" || type == "R4R") {
     import("levs-CS/r2r4L-side-columns.stl");
-  } else if (type == "R3L") {
+  } else if (type == "R3L" || type == "R3R") {
     //rotate([0,0, 180])
       import("levs-CS/r3L-side-columns.stl");
-  } else if (type == "R4L") {
+  } else if (type == "R4L" || type == "R2R") {
     mirror([0,1,0]) import("levs-CS/r2r4L-side-columns.stl");
   } else if (type == "T1L") {
-    rotate([0,0, 180]) mirror([1,0,0]) import("levs-CS/thumb-1u.stl");
+    rotate([0,0,180])
+      mirror([1,0,0]) import("levs-CS/thumb-1u.stl");
   } else if (type == "T1R") {
     import("levs-CS/thumb-1u.stl");
+  } else if (type == "R3x") {
+    import("levs-CS/convex-1u-for-thumbs-or-inner-index-column.stl");
   } else {
     assert(false, str("unrecognized Chicago Steno keycap type: ", type));
   }
