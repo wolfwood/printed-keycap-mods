@@ -16,7 +16,7 @@ module trackpoint_notch(far=false, index=false) {
   }
 }
 
-module trackpoint_notch_helper(far=false, index=false, key_spacing, column_offset, dia=10) {
+module trackpoint_notch_helper(far=false, index=false, key_spacing, column_offset, dia=9.7) {
   let(dia = is_undef($dia) ? dia : $dia, key_spacing = is_list(key_spacing) ? keyspacing : [key_spacing, key_spacing]) {
 
     difference(){
@@ -24,7 +24,7 @@ module trackpoint_notch_helper(far=false, index=false, key_spacing, column_offse
       translate([key_spacing.x/2,
 		 (xor(!index,far) ? -1 : 1) * ( key_spacing.y/2 + ((far?1:-1) * column_offset) ),
 		 0])
-	cylinder($fn=120, d=dia, h=20, center=true);
+	cylinder($fn=60, d=dia, h=20, center=true);
     }
   }
 }
