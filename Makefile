@@ -5,7 +5,7 @@ all: lpx cs-middle cs-index
 
 .PHONY: lpx cs-middle cs-index
 
-lpx: things/LPX-$(KEYBOARD).stl
+lpx: things/LPX-$(KEYBOARD)-near.stl things/LPX-$(KEYBOARD)-far.stl
 
 cs-middle: things/CS-$(KEYBOARD)-middle-array.stl
 
@@ -22,8 +22,11 @@ CS.scad: PseudoMakeMeKeyCapProfiles/skin.scad PseudoMakeMeKeyCapProfiles/sweep.s
 
 -include .*.depends
 
-things/LPX-$(KEYBOARD).stl: LPX.scad
-	$(OPENSCAD) -q --hardwarnings --render  -d .lpx.depends -o $@ $<
+things/LPX-$(KEYBOARD)-near.stl: LPX.scad
+	$(OPENSCAD) -q --hardwarnings --render  -d .lpx-near.depends -Dfar=false -o $@ $<
+
+things/LPX-$(KEYBOARD)-far.stl: LPX.scad
+	$(OPENSCAD) -q --hardwarnings --render  -d .lpx-far.depends -Dfar=true -o $@ $<
 
 things/CS-$(KEYBOARD)-middle-array.stl: CS.scad
 	$(OPENSCAD) -q --render  -d .cs-middle.depends -Dindex=false -o $@ $<
@@ -41,4 +44,4 @@ PseudoMakeMeKeyCapProfiles/sweep.scad: PseudoMakeMeKeyCapProfiles/list-comprehen
 	cp $< $@
 
 clean:
-	-rm .*.depends $(CS_TARGETS) things/CS-$(KEYBOARD)-middle-array.stl things/CS-$(KEYBOARD)-index-array.stl things/LPX-$(KEYBOARD).stl
+	-rm .*.depends $(CS_TARGETS) things/CS-$(KEYBOARD)-middle-array.stl things/CS-$(KEYBOARD)-index-array.stl things/LPX-$(KEYBOARD)-near.stl things/LPX-$(KEYBOARD)-far.stl
