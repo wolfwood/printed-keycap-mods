@@ -62,3 +62,8 @@ PseudoMakeMeKeyCapProfiles/sweep.scad: PseudoMakeMeKeyCapProfiles/list-comprehen
 
 clean:
 	-rm .*.depends $(CS_TARGETS) $(CS_TP_TARGETS) things/CS-$(KEYBOARD)-middle-array.stl things/CS-$(KEYBOARD)-index-array.stl things/LPX-$(KEYBOARD)-near.stl things/LPX-$(KEYBOARD)-far.stl
+
+image:
+	exiftool -overwrite_original -recurse -EXIF= images
+	cd images; find . -iname '*.png' -print0 | xargs -0 optipng -o7 -preserve
+	cd images; find . -iname '*.jpg' -print0 | xargs -0 jpegoptim --max=90 --strip-all --preserve --totals --all-progressive
