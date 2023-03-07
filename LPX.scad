@@ -5,6 +5,32 @@ module LPX() {
     rotate([48.5,0,90]) import("LPX/LPX.stl");
 }
 
+leg_cube = [7.2, 3.2, 6];
+leg_cube_position = [0, 0, -leg_cube.z/2 + 1.3];
+
+module LPX_legs() {
+  intersection(){
+    LPX();
+    translate(leg_cube_position) cube(leg_cube, center=true);
+  }
+}
+module LPX_shell() {
+  difference() {
+    LPX();
+    translate(leg_cube_position-[0, 0, .001]) cube(leg_cube, center=true);
+  }
+}
+
+module offset_LPX(pos=[0,1,0]) {
+  if (pos == [0,0,0]) {
+    LPX();
+  } else {
+    LPX_shell();
+    translate(pos) LPX_legs();
+  }
+}
+
+
 module printable() {
   rotate([0,0,-135]) rotate([-48.5,0,0]) rotate([0,0,-90]) children();
 }
