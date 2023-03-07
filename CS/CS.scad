@@ -1,6 +1,5 @@
-include <util.scad>;
-include <trackpoint_notch.scad>;
-include <settings.scad>;
+include <../trackpoint_notch.scad>;
+include <../settings.scad>;
 
 use <CS-bindings/sculpted.scad>;
 use <CS-bindings/thumb.scad>;

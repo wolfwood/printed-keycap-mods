@@ -1,4 +1,3 @@
-include <util.scad>
 include <trackpoint_notch.scad>
 
 module LPX() {

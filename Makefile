@@ -28,7 +28,7 @@ CS_TARGETS=$(addsuffix .stl,$(addprefix things/CS-,$(CS_PROFILE)))
 
 cs: $(CS_TARGETS)
 
-CS.scad: PseudoMakeMeKeyCapProfiles/skin.scad PseudoMakeMeKeyCapProfiles/sweep.scad
+CS/CS.scad: CS/PseudoMakeMeKeyCapProfiles/skin.scad CS/PseudoMakeMeKeyCapProfiles/sweep.scad
 
 -include .*.depends
 
@@ -38,26 +38,26 @@ things/LPX-$(KEYBOARD)-near.stl: LPX.scad
 things/LPX-$(KEYBOARD)-far.stl: LPX.scad
 	$(OPENSCAD) -q --hardwarnings --render  -d .lpx-far.depends -Dfar=true -o $@ $<
 
-things/CS-$(KEYBOARD)-middle-array.stl: CS.scad
+things/CS-$(KEYBOARD)-middle-array.stl: CS/CS.scad
 	$(OPENSCAD) -q --render  -d .cs-middle-array.depends -Dindex=false -o $@ $<
 
-things/CS-$(KEYBOARD)-index-array.stl: CS.scad
+things/CS-$(KEYBOARD)-index-array.stl: CS/CS.scad
 	$(OPENSCAD) -q --render -d .cs-index-array.depends -Dindex=true -o $@ $<
 
-things/CS-$(KEYBOARD)-middle-%.stl: CS.scad
+things/CS-$(KEYBOARD)-middle-%.stl: CS/CS.scad
 	$(OPENSCAD) -q --render  -d .cs-middle-$*.depends -Dindex=false  -Dtpkey=\"$*\" -o $@ $<
 
-things/CS-$(KEYBOARD)-index-%.stl: CS.scad
+things/CS-$(KEYBOARD)-index-%.stl: CS/CS.scad
 	$(OPENSCAD) -q --render -d .cs-index-$*.depends -Dindex=true -Dtpkey=\"$*\" -o $@ $<
 
 
 things/CS-%.stl: CS.scad
 	$(OPENSCAD) -q --render -d .cs-$*.depends -Dkeycap=\"$*\" -o $@ $<
 
-PseudoMakeMeKeyCapProfiles/skin.scad: PseudoMakeMeKeyCapProfiles/list-comprehension-demos/skin.scad
+CS/PseudoMakeMeKeyCapProfiles/skin.scad: CS/PseudoMakeMeKeyCapProfiles/list-comprehension-demos/skin.scad
 	cp $< $@
 
-PseudoMakeMeKeyCapProfiles/sweep.scad: PseudoMakeMeKeyCapProfiles/list-comprehension-demos/sweep.scad
+CS/PseudoMakeMeKeyCapProfiles/sweep.scad: CS/PseudoMakeMeKeyCapProfiles/list-comprehension-demos/sweep.scad
 	cp $< $@
 
 clean:
