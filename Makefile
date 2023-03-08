@@ -19,7 +19,7 @@ cs-index: things/CS-$(KEYBOARD)-index-array.stl
 
 cs-index-solo: $(addsuffix .stl,$(addprefix things/CS-$(KEYBOARD)-index-,$(TPKEYS)))
 
-CS_TP_TARGETS=$(addsuffix .stl,$(addprefix things/CS-$(KEYBOARD)-middle-,$(TPKEYS))) $(addsuffix .stl,$(addprefix things/CS-$(KEYBOARD)-index-,$(TPKEYS))
+CS_TP_TARGETS=$(addsuffix .stl,$(addprefix things/CS-$(KEYBOARD)-middle-,$(TPKEYS))) $(addsuffix .stl,$(addprefix things/CS-$(KEYBOARD)-index-,$(TPKEYS)))
 
 # skipping redundant key sculpts: R4 R2R R3R R4R
 CS_PROFILE=R2 R3 R3-homing R2L R3L R4L T1L T1R R3x
@@ -51,7 +51,7 @@ things/CS-$(KEYBOARD)-index-%.stl: CS/CS.scad
 	$(OPENSCAD) -q --render -d .cs-index-$*.depends -Dindex=true -Dtpkey=\"$*\" -o $@ $<
 
 
-things/CS-%.stl: CS.scad
+things/CS-%.stl: CS/CS.scad
 	$(OPENSCAD) -q --render -d .cs-$*.depends -Dkeycap=\"$*\" -o $@ $<
 
 CS/PseudoMakeMeKeyCapProfiles/skin.scad: CS/PseudoMakeMeKeyCapProfiles/list-comprehension-demos/skin.scad
