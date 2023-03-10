@@ -15,7 +15,7 @@ module trackpoint_notch(far=false, index=false) {
     _column_offset = 0;
     trackpoint_notch_helper(far=far, index=index, key_spacing=_key_spacing, column_offset=_column_offset) children();
   } else if(keyboard == "ortho-lpx") {
-    _key_spacing = 16.5;
+    _key_spacing = [16.5, 15.5];
     _column_offset = 0;
     trackpoint_notch_helper(far=far, index=index, key_spacing=_key_spacing, column_offset=_column_offset) children();
   } else if(keyboard == "cylindrical-lpx") {
