@@ -1,8 +1,8 @@
-include <trackpoint_notch.scad>
+include <../trackpoint_notch.scad>
 
 module LPX() {
   translate([-1.605,-29.001/*-28.96958*/,-9.02 + 2.7644])
-    rotate([48.5,0,90]) import("LPX/LPX.stl");
+    rotate([48.5,0,90]) import("../includes/LPX/LPX.stl");
 }
 
 leg_cube = [7.2, 3.2, 6];
