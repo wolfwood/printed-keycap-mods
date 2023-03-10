@@ -1,5 +1,5 @@
 include <settings.scad>
-include <util/chord.scad>;
+use <util/chord.scad>;
 
 module trackpoint_notch(far=false, index=false) {
   if (keyboard == "santoku") {

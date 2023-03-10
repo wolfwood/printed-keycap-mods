@@ -1,4 +1,4 @@
-include <../trackpoint_notch.scad>;
+use <../trackpoint_notch.scad>;
 include <../settings.scad>;
 
 use <CS-bindings/sculpted.scad>;

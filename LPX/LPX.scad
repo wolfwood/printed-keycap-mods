@@ -1,4 +1,4 @@
-include <../trackpoint_notch.scad>
+use <../trackpoint_notch.scad>
 
 module LPX() {
   translate([-1.605,-29.001/*-28.96958*/,-9.02 + 2.7644])
