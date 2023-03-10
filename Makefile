@@ -3,11 +3,21 @@ KEYBOARD != perl -n -e'/^keyboard\s*=\s*"(\S+)"/ && print $$1' < settings.scad
 
 most: lpx cs-middle cs-index
 
-all: most cs cs-middle-solo cs-index-solo
+choc:lpx cs lpx-offset
 
-.PHONY: lpx cs-middle cs-index most cs cs-middle-solo cs-index-solo
+mx: lpxmx
+
+all: most choc mx cs-middle-solo cs-index-solo
+
+.PHONY: lpx cs-middle cs-index most cs cs-middle-solo cs-index-solo choc mx all
 
 lpx: things/LPX-$(KEYBOARD)-near.stl things/LPX-$(KEYBOARD)-far.stl
+
+lpxmx: things/LPxMX.stl things/LPxMX-speed.stl
+
+OFFSETS=1.0 0.5
+
+lpx-offset: $(addsuffix .stl,$(addprefix things/LPX-offset-,$(OFFSETS)))
 
 TPKEYS=R3-homing R3 R2-near R2-far
 
@@ -32,11 +42,12 @@ CS/CS.scad: CS/PseudoMakeMeKeyCapProfiles/skin.scad CS/PseudoMakeMeKeyCapProfile
 
 -include .*.depends
 
-things/LPX-$(KEYBOARD)-near.stl: LPX.scad
-	$(OPENSCAD) -q --hardwarnings --render  -d .lpx-near.depends -Dfar=false -o $@ $<
 
-things/LPX-$(KEYBOARD)-far.stl: LPX.scad
-	$(OPENSCAD) -q --hardwarnings --render  -d .lpx-far.depends -Dfar=true -o $@ $<
+things/LPX-$(KEYBOARD)-near.stl: LPX/LPX.scad
+	$(OPENSCAD) -q --hardwarnings --render -d .lpx-near.depends -Dfar=false -o $@ $<
+
+things/LPX-$(KEYBOARD)-far.stl: LPX/LPX.scad
+	$(OPENSCAD) -q --hardwarnings --render -d .lpx-far.depends -Dfar=true -o $@ $<
 
 things/CS-$(KEYBOARD)-middle-array.stl: CS/CS.scad
 	$(OPENSCAD) -q --render  -d .cs-middle-array.depends -Dindex=false -o $@ $<
@@ -51,6 +62,17 @@ things/CS-$(KEYBOARD)-index-%.stl: CS/CS.scad
 	$(OPENSCAD) -q --render -d .cs-index-$*.depends -Dindex=true -Dtpkey=\"$*\" -o $@ $<
 
 
+things/LPxMX.stl: LPX/MX.scad
+	$(OPENSCAD) -q --hardwarnings --render -d .lpxmx.depends -Dspeed=false -o $@ $<
+
+things/LPxMX-speed.stl: LPX/MX.scad
+	$(OPENSCAD) -q --hardwarnings --render -d .lpxmx-speed.depends -Dspeed=true -o $@ $<
+
+
+things/LPX-offset-%.stl: LPX/LPX.scad
+	$(OPENSCAD) -q --hardwarnings --render -d .lpx-offset-$*.depends -Dspeed=false -Doffset=$* -o $@ $<
+
+
 things/CS-%.stl: CS/CS.scad
 	$(OPENSCAD) -q --render -d .cs-$*.depends -Dkeycap=\"$*\" -o $@ $<
 
@@ -59,6 +81,7 @@ CS/PseudoMakeMeKeyCapProfiles/skin.scad: CS/PseudoMakeMeKeyCapProfiles/list-comp
 
 CS/PseudoMakeMeKeyCapProfiles/sweep.scad: CS/PseudoMakeMeKeyCapProfiles/list-comprehension-demos/sweep.scad
 	cp $< $@
+
 
 clean:
 	-rm .*.depends $(CS_TARGETS) $(CS_TP_TARGETS) things/CS-$(KEYBOARD)-middle-array.stl things/CS-$(KEYBOARD)-index-array.stl things/LPX-$(KEYBOARD)-near.stl things/LPX-$(KEYBOARD)-far.stl

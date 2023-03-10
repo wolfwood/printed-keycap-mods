@@ -11,6 +11,19 @@ This code also takes keycaps and cuts notches to make room for a trackpoint's ru
 ### Placement
 Two trackpoint placements are supported. The upper left corner of the home key, "index" or *index=true*, and the upper right corner of the home key, "middle" or *index=false*.
 
+## Stupid Stem Tricks
+For non-SCAD keycaps we can easily remove the stem using a `difference()` and replace it with whatever we like. This opens several possibilities. For SCAD keycaps we can likely tweak the source, or pass appropriate parameters.
+
+### MX Stem Swap
+The LPxMX profile is a choc keycap on an MX stem from @rsheldiii's [keyV2 library](https://github.com/rsheldiii/KeyV2.git) which was designed to be amenable to FDM printing.
+
+The height of the stem depends on the switches used. Most MX switches have 4.0 mm of travel, but speed switches have 3.5 mm of travel and so can use a slightly shorter stem. If this were mass production, we'd just use the larger size, but since we are custom printing keycaps we can choose to use shorter keycaps when possible.
+
+### Stem Offsets
+For dactyls using a typical cylindrical column placement, there is no issue with the keyswitches colliding. However, if we try to have a convex portion of our column (such as for the number row) the keycaps may be spaced far enough apart, the the switches below would collide. Using an offset stem allows us to pack keycaps more tightly, while spacing the switches far enough apart that they don't intersect.
+
+Currently only implemented for LPX.
+
 # Profiles
 ### [LPX](https://github.com/levpopov/LPX)
 No unmodified keycap is generated. Use [the source *.stl* file](https://github.com/levpopov/LPX/blob/main/LPX.stl).
@@ -61,5 +74,13 @@ Please open an issue to request support for new keycaps, new keyboards, flexibil
     - [ ] communicate trackpoint notch location in a more clear and universal manner
   - [ ] way to add sprues to keycap arrays for commercial 3D printing? what about shrinkage?
   - [ ] stem mods, such as integrated tilters
+	- [x] LPxMX
+    - [x] LPX-offset
+    - [ ] CS-MX
+    - [ ] longer LPX stem for damper?
   - [ ] try out more keycaps from https://github.com/namnlos-io/choc_keycaps
   - [ ] https://github.com/madebyperce/shelby-min-mx-keycaps LPxMX alternative?
+  - [ ] support more keycaps from keyV2? rewrite this code a branch of keyV2?
+  - [ ] CS T1S
+  - [ ] bigger homing dots?
+  - [ ] makefile rules to fetch submodules if missing

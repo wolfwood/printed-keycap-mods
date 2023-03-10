@@ -1,6 +1,9 @@
 [submodule "LPX"]
-	path = LPX
+	path = includes/LPX
 	url = https://github.com/levpopov/LPX.git
 [submodule "PseudoMakeMeKeyCapProfiles"]
 	path = CS/PseudoMakeMeKeyCapProfiles
 	url = https://github.com/wolfwood/PseudoMakeMeKeyCapProfiles.git
+[submodule "includes/KeyV2"]
+	path = includes/KeyV2
+	url = https://github.com/rsheldiii/KeyV2.git
