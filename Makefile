@@ -13,7 +13,7 @@ all: most choc mx cs-middle-solo cs-index-solo lpx-offset
 
 lpx: things/LPX-$(KEYBOARD)-near.stl things/LPX-$(KEYBOARD)-far.stl
 
-LPXMX=things/LPxMX.stl things/LPxMX-speed.stl
+LPXMX=things/LPxMX.stl
 lpxmx: $(LPXMX)
 
 OFFSET=1.0 0.5
@@ -64,10 +64,7 @@ things/CS-$(KEYBOARD)-index-%.stl: CS/CS.scad
 
 
 things/LPxMX.stl: LPX/MX.scad
-	$(OPENSCAD) -q --hardwarnings --render -d .lpxmx.depends -Dspeed=false -o $@ $<
-
-things/LPxMX-speed.stl: LPX/MX.scad
-	$(OPENSCAD) -q --hardwarnings --render -d .lpxmx-speed.depends -Dspeed=true -o $@ $<
+	$(OPENSCAD) -q --hardwarnings --render -d .lpxmx.depends -o $@ $<
 
 
 things/LPX-offset-%.stl: LPX/LPX.scad

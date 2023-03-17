@@ -2,7 +2,7 @@ use <LPX.scad>
 include <../includes/KeyV2/src/stems.scad>;
 
 
-module mx_stem(stem_h=4, slop=.1) {
+module mx_stem(stem_h=3.6, slop=.2) {
   angle= [0,48.5,0];
   total = stem_h + slop;
   difference() {
@@ -33,7 +33,7 @@ module mx_stem(stem_h=4, slop=.1) {
 }
 
 // stem_h = 4 for most switches, 3.5 for speed switches
-module LPxMX(stem_h=4, pos=[0,0,0], slop=.1) {
+module LPxMX(stem_h=3.6, pos=[0,0,0], slop=.2) {
   union(){
     LPX_shell();
     translate(pos) mx_stem(stem_h=stem_h, slop=slop);
@@ -42,4 +42,4 @@ module LPxMX(stem_h=4, pos=[0,0,0], slop=.1) {
 
 speed = true;
 offset=0;
-printable() LPxMX(stem_h=speed ? 3.5 : 4, pos=[0,offset,0]);
+printable() LPxMX(pos=[0,offset,0]);
