@@ -28,7 +28,7 @@ module trackpoint_notch(far=false, index=false) {
 }
 
 module trackpoint_notch_helper(far=false, index=false, key_spacing, column_offset, dia=9.7) {
-  let(dia = is_undef($dia) ? dia : $dia, key_spacing = is_list(key_spacing) ? keyspacing : [key_spacing, key_spacing]) {
+  let(dia = is_undef($dia) ? dia : $dia, key_spacing = is_list(key_spacing) ? key_spacing : [key_spacing, key_spacing]) {
 
     difference(){
       children();
@@ -41,7 +41,7 @@ module trackpoint_notch_helper(far=false, index=false, key_spacing, column_offse
 }
 
 module rotational_trackpoint_notch_helper(far=false, index=false, key_spacing, chord, column_offset=0, dia=9.7) {
-  let(dia = is_undef($dia) ? dia : $dia,  key_spacing = is_list(key_spacing) ? keyspacing : [key_spacing, key_spacing],
+  let(dia = is_undef($dia) ? dia : $dia,  key_spacing = is_list(key_spacing) ? key_spacing : [key_spacing, key_spacing],
       chord=normalize_chord(chord)) {
     difference(){
       children();
