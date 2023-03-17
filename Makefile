@@ -13,11 +13,12 @@ all: most choc mx cs-middle-solo cs-index-solo
 
 lpx: things/LPX-$(KEYBOARD)-near.stl things/LPX-$(KEYBOARD)-far.stl
 
-lpxmx: things/LPxMX.stl things/LPxMX-speed.stl
+LPXMX=things/LPxMX.stl things/LPxMX-speed.stl
+lpxmx: $(LPXMX)
 
-OFFSETS=1.0 0.5
-
-lpx-offset: $(addsuffix .stl,$(addprefix things/LPX-offset-,$(OFFSETS)))
+OFFSET=1.0 0.5
+LPXOFFSET=$(addsuffix .stl,$(addprefix things/LPX-offset-,$(OFFSET)))
+lpx-offset: $(LPXOFFSET)
 
 TPKEYS=R3-homing R3 R2-near R2-far
 
@@ -84,7 +85,7 @@ CS/PseudoMakeMeKeyCapProfiles/sweep.scad: CS/PseudoMakeMeKeyCapProfiles/list-com
 
 
 clean:
-	-rm .*.depends $(CS_TARGETS) $(CS_TP_TARGETS) things/CS-$(KEYBOARD)-middle-array.stl things/CS-$(KEYBOARD)-index-array.stl things/LPX-$(KEYBOARD)-near.stl things/LPX-$(KEYBOARD)-far.stl
+	-rm .*.depends $(LPXMX) $(LPXOFFSET) $(CS_TARGETS) $(CS_TP_TARGETS) things/CS-$(KEYBOARD)-middle-array.stl things/CS-$(KEYBOARD)-index-array.stl things/LPX-$(KEYBOARD)-near.stl things/LPX-$(KEYBOARD)-far.stl
 
 image:
 	exiftool -overwrite_original -recurse -EXIF= images
