@@ -7,7 +7,7 @@ choc:lpx cs lpx-offset
 
 mx: lpxmx
 
-all: most choc mx cs-middle-solo cs-index-solo
+all: most choc mx cs-middle-solo cs-index-solo lpx-offset
 
 .PHONY: lpx cs-middle cs-index most cs cs-middle-solo cs-index-solo choc mx all
 

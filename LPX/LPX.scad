@@ -41,4 +41,8 @@ module printable() {
 far = false;
 index = false;
 
-printable() trackpoint_notch(far=far, index=index) LPX();
+if (!is_undef(offset)) {
+  printable() offset_LPX([0,offset,0]);
+} else {
+  printable() trackpoint_notch(far=far, index=index) LPX();
+}
