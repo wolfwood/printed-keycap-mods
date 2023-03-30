@@ -62,3 +62,4 @@ Please open an issue to request support for new keycaps, new keyboards, flexibil
   - [ ] way to add sprues to keycap arrays for commercial 3D printing? what about shrinkage?
   - [ ] stem mods, such as integrated tilters
   - [ ] try out more keycaps from https://github.com/namnlos-io/choc_keycaps
+  - [ ] https://github.com/madebyperce/shelby-min-mx-keycaps LPxMX alternative?
