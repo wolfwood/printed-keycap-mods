@@ -1,7 +1,7 @@
 use <../trackpoint_notch.scad>
 
 module LPX() {
-  translate([-1.605,-29.001/*-28.96958*/,-9.02 + 2.7644])
+  translate([-1.605/*+.037*/,-29.001/*-28.96958*/,-9.02 + 2.7644 +.001])
     rotate([48.5,0,90]) import("../includes/LPX/LPX.stl");
 }
 
