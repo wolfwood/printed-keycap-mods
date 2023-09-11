@@ -89,6 +89,7 @@ module printable(other=false) {
 }
 
 index = false;
+lateral=true;
 
 if (is_undef(keycap)) {
   let(x_spacing = is_list(grid_spacing) ? grid_spacing.x : grid_spacing, y_spacing = is_list(grid_spacing) ? grid_spacing.y : grid_spacing, stagger = is_undef(grid_stagger) ? 0 : grid_stagger ? y_spacing/2 : 0) {
@@ -97,13 +98,18 @@ if (is_undef(keycap)) {
       if (is_undef(tpkey) || tpkey == "R2-near") translate(is_undef(tpkey) ? [0,y_spacing,0] : [0,0,0]) printable() trackpoint_notch(far=false) CS("R2");
       if (is_undef(tpkey) || tpkey == "R3") translate(is_undef(tpkey) ? [x_spacing,stagger,0] : [0,0,0]) printable(other=true) mirror([1,0,0]) trackpoint_notch(far=false, index=true) CS("R3");
       if (is_undef(tpkey) || tpkey == "R2-far") translate(is_undef(tpkey) ? [x_spacing,stagger+y_spacing,0] : [0,0,0]) printable(other=true) mirror([1,0,0]) trackpoint_notch(far=true, index=true) CS("R2");
+
     } else { // index
-      if (is_undef(tpkey) || tpkey == "R3-homing") printable(true) mirror([1,0,0]) trackpoint_notch(far=false, index=true) CS("R3-homing");
-      if (is_undef(tpkey) || tpkey == "R2-far") translate(is_undef(tpkey) ? [0,y_spacing,0] : [0,0,0]) printable(other=true) mirror([1,0,0]) trackpoint_notch(far=true, index=true) CS("R2");
-      // if (is_undef(tpkey) || tpkey == "R3") translate([x_spacing,stagger,0] : [0,0,0]) printable() trackpoint_notch(far=true, index=false) CS("R3");
-      //f (is_undef(tpkey) || tpkey == "R2-near") translate([x_spacing,stagger+y_spacing,0] : [0,0,0]) printable() trackpoint_notch(far=false, index=false) CS("R2");
-       if (is_undef(tpkey) || tpkey == "R3") translate(is_undef(tpkey) ? [x_spacing,stagger,0] : [0,0,0]) printable(other=true) trackpoint_notch(far=true, index=false) rotate([0,0,180]) CS("R3L");
-      if (is_undef(tpkey) || tpkey == "R2-near") translate(is_undef(tpkey) ? [x_spacing,stagger+y_spacing,0] : [0,0,0]) printable(other=true) trackpoint_notch(far=false, index=false) rotate([0,0,180]) CS("R2L");
+
+      if ((is_undef(tpkey) || tpkey == "R3-homing") && !lateral) printable(other=true) trackpoint_notch($x=-1,$y=1,far=false, index=true) CS("R3-homing");
+      if ((is_undef(tpkey) || tpkey == "R2-far") && !lateral) translate(is_undef(tpkey) ? [0,y_spacing,0] : [0,0,0]) printable(other=true) trackpoint_notch($x=-1,$y=-1,far=true) CS("R2");
+      if ((is_undef(tpkey) || tpkey == "R3") && !lateral) translate(is_undef(tpkey) ? [x_spacing,stagger,0] : [0,0,0]) printable() trackpoint_notch($x=1,$y=1,far=true) CS("R3");
+	  if ((is_undef(tpkey) || tpkey == "R2-near") && !lateral) translate(is_undef(tpkey) ? [x_spacing,stagger+y_spacing,0] : [0,0,0]) printable() trackpoint_notch($x=1,$y=-1,far=false) CS("R2");
+
+      if ((is_undef(tpkey) || tpkey == "R3-homing") && lateral) printable(other=true) trackpoint_notch($x=-1,$y=1,far=false) CS("R3R");
+      if ((is_undef(tpkey) || tpkey == "R2-far") && lateral) translate(is_undef(tpkey) ? [0,y_spacing,0] : [0,0,0]) printable(other=true) trackpoint_notch($x=-1,$y=-1, far=true) CS("R2R");
+      if ((is_undef(tpkey) || tpkey == "R3") && lateral) translate(is_undef(tpkey) ? [x_spacing,stagger,0] : [0,0,0]) printable() trackpoint_notch($x=1,$y=1,far=true) rotate([0,0,180]) CS("R3L");
+      if ((is_undef(tpkey) || tpkey == "R2-near") && lateral) translate(is_undef(tpkey) ? [x_spacing,stagger+y_spacing,0] : [0,0,0]) printable() trackpoint_notch($x=1,$y=-1,far=false) rotate([0,0,180]) CS("R2L");
     }
   }
 } else {
