@@ -31,6 +31,22 @@ module offset_LPX(pos=[0,1,0]) {
   }
 }
 
+module chording() {
+  difference() {
+    union()
+      children();
+
+    //let (r = 1.5, y = 13.75 - 1.5*r, x=r*2, a=11) {
+    let (r = 2.5, y = 13.75 +.59- 1.5*r, x=r*2, a=11) {
+      translate([-6.35+.4,0,4-r]) rotate([0,a,0]) difference() {
+	translate([-x,-y/2-3*r/4,0]) cube([x,y+1.5*r,x]);
+	rotate([-90,0,0]) cylinder($fn=120,r=r,h=y,center=true);
+	translate([0,y/2,0]) sphere($fn=120,r=r);
+	translate([0,-y/2,0]) sphere($fn=120,r=r);
+      }
+    }
+  }
+}
 
 module printable() {
   rotate([0,0,-135]) rotate([-48.5,0,0]) rotate([0,0,-90]) children();
