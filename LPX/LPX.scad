@@ -27,6 +27,7 @@ module offset_LPX(pos=[0,1,0]) {
   } else {
     LPX_shell();
     translate(pos) LPX_legs();
+    translate([-7,-7.1,0]) cube([.8,1,1.4]+2*pos);
   }
 }
 
