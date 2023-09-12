@@ -1,3 +1,4 @@
+include <../settings.scad>
 use <../trackpoint_notch.scad>
 
 module LPX() {
@@ -49,7 +50,7 @@ module chording() {
 }
 
 module printable() {
-  rotate([0,0,-135]) rotate([-48.5,0,0]) rotate([0,0,-90]) children();
+  rotate([0,0,-135 + (fans_on_left ? -90 : 0)]) rotate([-48.5,0,0]) rotate([0,0,-90]) children();
 }
 
 // LPX is symmetrical so the notch on lower right is the same as upper left

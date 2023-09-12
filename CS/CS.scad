@@ -76,7 +76,7 @@ module CS_prerendered(type="R3") {
 
 module printable(other=false) {
   difference(){
-    rotate([0,0,other ? -45 : 135])
+    rotate([0,0,(other ? -45 : 135) + (fans_on_left ? -90 : 0)])
       rotate([0,(other ? 1 : -1)*45,0]) children();
 
     // nip off the edge so the keycap sticks better to the print bed
