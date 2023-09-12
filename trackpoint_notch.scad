@@ -63,8 +63,8 @@ module trackpoint_helper_dispatch(far, index, key_spacing, column_offset) {
 //
 //  instead the dynamic chamfer cuts the keycap with its own top
 //  surface, lowered by increasing amounts. different points along the
-//  radius will be at different heights based on the keycap shape,
-//  unlike with a cone. the downsides are that the depth of the
+//  circumference will be at different heights based on the keycap
+//  shape, unlike with a cone. the downsides are that the depth of the
 //  trackpoint is limited by the tallest features of the cap, so the
 //  chamfer may need to be a bit steeper, and complexity of both the
 //  computation and the resulting model. But the advantages are that
