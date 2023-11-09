@@ -83,7 +83,7 @@ module printable(other=false) {
     h=5;
     cut_distance=4.9; // 5.6 is minimally invasive, but not as effective
     translate([0,0,-h/2 - cut_distance]) cube([40,40,h], center=true);
-    rotate([0,90,-45])
+    rotate([90,0,-45])
       translate([0,0,-h/2 - cut_distance]) cube([40,40,h], center=true);
   }
 }
