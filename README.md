@@ -49,11 +49,11 @@ If using a keycap array *.stl*, split the model to objects in your slicer, then 
 
 The main issue I've had has been with the bottom edge of the keycap partially or full detaching during the print. The support tweaks are meant to address this issue, along with the model modifications to flatten the edges the keycap rests on while printing.
 
-  - *layer height* - I'm currently using 0.1 mm. 0.07 mm is doable but arguably feels worse. 0.15 is acceptable and definitely where you should start your testing before trying to print multiple keycaps.
-  - *0% infill* - Lev said this helps with surface smoothness. also faster.
-  - *enable supports* - this thing is gonna tip over if you don't support it! the following are for traditional supports. tree supports are not effective. the whole model benefits from a solid support structure.
-    - *Top contact Z distance* = 0.10 - get supports closer to the part
-	- *Pattern spacing* = 1.5 - more supportive
+  - *layer height* - On the Prusa MK3S I used 0.1 mm. 0.07 mm is doable but arguably feels worse. 0.15 is acceptable and definitely where you should start your testing before trying to print multiple keycaps. On the Prusa MK4 I was able to use .05 mm with a brim which produced a very smooth top surface, but also a rough patch on one edge.
+  - *0% infill* - This helps with surface smoothness. also faster.
+  - *enable supports* - This thing is gonna tip over if you don't support it! I have preferred to use traditional supports. Tree supports are definitely not effective without a brim; the whole model benefits from a solid support structure. As of prusaslice 2.6, the default is support style is snug, which applies the following by default.
+	- *Top contact Z distance* = 0.10 - get supports closer to the part
+    - *Pattern spacing* = 1.5 - more supportive
   - *Complete individual objects* - prints parts one at a time so there isn't stringing between keycaps ruining the top surface. you also need to split models with multiple keycaps, if using.
 
 # SLA Printing Suggestions
