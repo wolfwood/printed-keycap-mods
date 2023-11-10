@@ -69,7 +69,7 @@ Please open an issue to request support for new keycaps, new keyboards, flexibil
   - [ ] means to specify arbitrary arrays of keycaps (in settings/from render command)
     - [ ] split array generation off from main keycap files (can be generic? or per-profile?)
   - [x] means to generate individual trackpoint notched keycaps, not in an array
-    - [ ] communicate trackpoint notch location in a more clear and universal manner
+    - [x] communicate trackpoint notch location in a more clear and universal manner
   - [ ] way to add sprues to keycap arrays for commercial 3D printing? what about shrinkage?
   - [ ] stem mods, such as integrated tilters
 	- [x] LPxMX
