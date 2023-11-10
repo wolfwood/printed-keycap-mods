@@ -18,7 +18,7 @@ For non-SCAD keycaps we can easily remove the stem using a `difference()` and re
 The LPxMX profile is a choc keycap on an MX stem from @rsheldiii's [keyV2 library](https://github.com/rsheldiii/KeyV2.git) which was designed to be amenable to FDM printing.
 
 ### Stem Offsets
-For dactyls using a typical cylindrical column placement, there is no issue with the keyswitches colliding. However, if we try to have a convex portion of our column (such as for the number row) the keycaps may be spaced far enough apart, the the switches below would collide. Using an offset stem allows us to pack keycaps more tightly, while spacing the switches far enough apart that they don't intersect.
+For dactyls using a typical cylindrical column placement, there is no issue with the keyswitches colliding. However, if we try to have a convex portion of our column (such as for the number row) the keycaps may be spaced far enough apart that the switches below would collide. Using an offset stem allows us to pack keycaps more tightly, while spacing the switches far enough apart that they don't intersect.
 
 Currently only implemented for LPX.
 
