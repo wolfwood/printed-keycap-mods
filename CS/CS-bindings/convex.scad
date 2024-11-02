@@ -1,4 +1,4 @@
-use <../PseudoMakeMeKeyCapProfiles/Choc_Chicago_Steno_Convex.scad>;
+use <../../includes/PseudoMakeMeKeyCapProfiles/Choc_Chicago_Steno_Convex.scad>;
 
 module convex_key(key="R3x", homing=false) {
   keyID = key == "R2x" ? 0 :

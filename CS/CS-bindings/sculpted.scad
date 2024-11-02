@@ -1,4 +1,4 @@
-use <../PseudoMakeMeKeyCapProfiles/Choc_Chicago_Steno.scad>;
+use <../../includes/PseudoMakeMeKeyCapProfiles/Choc_Chicago_Steno.scad>;
 
 module sculpted_key(key="R3", homing=false) {
   keyID = key == "R2" || key == "R4" ? 0 :

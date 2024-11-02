@@ -39,7 +39,7 @@ CS_TARGETS=$(addsuffix .stl,$(addprefix things/CS-,$(CS_PROFILE)))
 
 cs: $(CS_TARGETS)
 
-CS/CS.scad: CS/PseudoMakeMeKeyCapProfiles/skin.scad CS/PseudoMakeMeKeyCapProfiles/sweep.scad
+CS/CS.scad: includes/PseudoMakeMeKeyCapProfiles/skin.scad includes/PseudoMakeMeKeyCapProfiles/sweep.scad
 
 -include .*.depends
 
@@ -74,10 +74,10 @@ things/LPX-offset-%.stl: LPX/LPX.scad
 things/CS-%.stl: CS/CS.scad
 	$(OPENSCAD) -q --render -d .cs-$*.depends -Dkeycap=\"$*\" -o $@ $<
 
-CS/PseudoMakeMeKeyCapProfiles/skin.scad: CS/PseudoMakeMeKeyCapProfiles/list-comprehension-demos/skin.scad
+includes/PseudoMakeMeKeyCapProfiles/skin.scad: includes/PseudoMakeMeKeyCapProfiles/list-comprehension-demos/skin.scad
 	cp $< $@
 
-CS/PseudoMakeMeKeyCapProfiles/sweep.scad: CS/PseudoMakeMeKeyCapProfiles/list-comprehension-demos/sweep.scad
+includes/PseudoMakeMeKeyCapProfiles/sweep.scad: includes/PseudoMakeMeKeyCapProfiles/list-comprehension-demos/sweep.scad
 	cp $< $@
 
 

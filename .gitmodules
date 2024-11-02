@@ -2,7 +2,7 @@
 	path = includes/LPX
 	url = https://github.com/levpopov/LPX.git
 [submodule "PseudoMakeMeKeyCapProfiles"]
-	path = CS/PseudoMakeMeKeyCapProfiles
+	path = includes/PseudoMakeMeKeyCapProfiles
 	url = https://github.com/wolfwood/PseudoMakeMeKeyCapProfiles.git
 [submodule "includes/KeyV2"]
 	path = includes/KeyV2

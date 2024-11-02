@@ -1,4 +1,4 @@
-use <../PseudoMakeMeKeyCapProfiles/Choc_Chicago_Steno_Thumb.scad>;
+use <../../includes/PseudoMakeMeKeyCapProfiles/Choc_Chicago_Steno_Thumb.scad>;
 
 module thumb_key(key="T1") {
   keyID = key == "T1" ? 2 :
