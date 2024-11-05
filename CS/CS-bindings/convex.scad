@@ -1,9 +1,15 @@
 use <../../includes/PseudoMakeMeKeyCapProfiles/Choc_Chicago_Steno_Convex.scad>;
 
+function name2id_convex(key) =
+  key == "R2x" ? 0 :
+  key == "R3x" ? 1 :
+  -1;
+
 module convex_key(key="R3x", homing=false) {
-  keyID = key == "R2x" ? 0 :
-    key == "R3x" ? 1 :
-    assert(false, str("invalid CS thumb key ID: ", key));
+  keyID = name2id_convex(key);
+
+  if (keyID < 0)
+    assert(false, str("invalid CS convex key ID: ", key));
 
   keycap(keyID   = keyID, //change profile refer to KeyParameters Struct
 	 cutLen  = 0, //Don't change. for chopped caps
@@ -17,5 +23,7 @@ module convex_key(key="R3x", homing=false) {
 	 Legends = false
 	 );
 }
+
+function lookup_sculpted_convex(key) = XAngleSkew(name2id(key));
 
 convex_key();

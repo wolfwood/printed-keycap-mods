@@ -1,9 +1,15 @@
 use <../../includes/PseudoMakeMeKeyCapProfiles/Choc_Chicago_Steno_Thumb.scad>;
 
-module thumb_key(key="T1") {
-  keyID = key == "T1" ? 2 :
-    key == "R2L" ? 0 :
-    key == "R3L" ? 1 :
+function name2id_thumb(key) =
+  key == "T1" ? 2 :
+  key == "R2L" ? 0 :
+  key == "R3L" ? 1 :
+  -1;
+
+module thumb_key(key="T1", homing=false) {
+  keyID = name2id_thumb(key);
+
+  if (keyID < 0)
     assert(false, str("invalid CS thumb key ID: ", key));
 
   keycap(keyID   = keyID, //change profile refer to KeyParameters Struct
@@ -18,5 +24,7 @@ module thumb_key(key="T1") {
 	 Legends = false
 	 );
 }
+
+function lookup_sculpted_thumb(key) = XAngleSkew(name2id_thumb(key));
 
 thumb_key();

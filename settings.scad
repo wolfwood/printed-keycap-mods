@@ -9,6 +9,21 @@ grid_stagger = true;
 fans_on_left=true;
 
 
+// === Aesthetics ===
+
+// unnecessary, but you might prefer symmetrical sides, or you might prefer one side to be unblemished
+function trim_both_sides() = false;
+
+// by default, the layer lines on sculpted keycaps do not run north-south. this corrects this at the
+// expense of trimmed edges that run at an angle. if the look of this bothers you, disable here
+function sculpt_compensation() = true;
+
+
+// === Trackpoint ===
+
+// whether to add bumps to index finger home row keys for tp keys
+function homing_dots() = false;
+
 // use a chamfered notch rather than a hole that accommodates the entire trackpoint cap
 // chamfer makes a lot of polygons and can fail to preview / consume a lot of RAM and CPU when rendering
 function tp_chamfer() = $preview ? false : true;
