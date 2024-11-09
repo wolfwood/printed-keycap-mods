@@ -128,6 +128,9 @@ module printable(type, other=false, trim=true, reverse_sculpt=false) {
 
 index = false;
 lateral=true;
+// for laterals, the notch facing up fives a cleaner notch,
+// but notch facing down gives a cleaner lateral chrording edge
+notch_up = false;
 
 if (is_undef(keycap)) {
   let(x_spacing = is_list(grid_spacing) ? grid_spacing.x : grid_spacing, y_spacing = is_list(grid_spacing) ? grid_spacing.y : grid_spacing, stagger = is_undef(grid_stagger) ? 0 : grid_stagger ? y_spacing/2 : 0) {
@@ -180,22 +183,22 @@ if (is_undef(keycap)) {
       } else {
         if (is_undef(tpkey) || tpkey == "R3-homing")
           let (tpkey =  /*homing_dots() ? "R3L-homing" :*/ "R3R")
-            printable(tpkey, other=true)
+            printable(tpkey, other=notch_up)
             trackpoint_notch($x=-1,$y=1,far=false) CS("R3R");
         if (is_undef(tpkey) || tpkey == "R2-far")
           translate(is_undef(tpkey) ? [0,y_spacing,0] : [0,0,0])
             let (tpkey = "R2R")
-            printable(tpkey, other=true)
+            printable(tpkey, other=notch_up)
             trackpoint_notch($x=-1,$y=-1, far=true) CS(tpkey);
         if (is_undef(tpkey) || tpkey == "R3")
           translate(is_undef(tpkey) ? [x_spacing,stagger,0] : [0,0,0])
             let (tpkey = "R3L")
-            printable(tpkey)
+            printable(tpkey, other=!notch_up)
             trackpoint_notch($x=1,$y=1,far=true) rotate([0,0,180]) CS("R3L");
         if (is_undef(tpkey) || tpkey == "R2-near")
           translate(is_undef(tpkey) ? [x_spacing,stagger+y_spacing,0] : [0,0,0])
             let (tpkey = "R2L")
-            printable(tpkey, reverse_sculpt=true)
+            printable(tpkey, other=!notch_up, reverse_sculpt=true)
             trackpoint_notch($x=1,$y=-1,far=false) rotate([0,0,180]) CS(tpkey);
       }
     }

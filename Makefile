@@ -57,6 +57,12 @@ cs: $(CS_TARGETS)
 
 CS/CS.scad: includes/PseudoMakeMeKeyCapProfiles/skin.scad includes/PseudoMakeMeKeyCapProfiles/sweep.scad
 
+DES_PROFILE=R2 R3 R3-homing R4 # R1 R5
+
+DES_LP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix things/DES-LP-,$(DES_PROFILE)))
+
+des-lp: $(DES_LP_TARGETS)
+
 -include .*.depends
 
 
@@ -89,6 +95,10 @@ things/LPX-offset-%.$(FORMAT): LPX/LPX.scad
 
 things/CS-%.$(FORMAT): CS/CS.scad
 	$(OPENSCAD) $(SCADFLAGS) --render -d .cs-$*.depends -Dkeycap=\"$*\" -o $@ $<
+
+things/DES-LP-%.$(FORMAT): DES-LP/DES-LP.scad
+	$(OPENSCAD) $(SCADFLAGS) --render -d .des-lp-$*.depends -Dkeycap=\"$*\" -o $@ $<
+
 
 includes/PseudoMakeMeKeyCapProfiles/skin.scad: includes/PseudoMakeMeKeyCapProfiles/list-comprehension-demos/skin.scad
 	cp $< $@
