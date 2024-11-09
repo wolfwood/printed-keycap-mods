@@ -2,6 +2,7 @@ use <../../includes/PseudoMakeMeKeyCapProfiles/Choc_Chicago_Steno_Thumb.scad>;
 
 function name2id_thumb(key) =
   key == "T1" ? 2 :
+  key == "T0" ? 15 :
   key == "R2L" ? 0 :
   key == "R3L" ? 1 :
   -1;
