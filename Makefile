@@ -65,6 +65,16 @@ DES_LP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix things/DES-LP-,$(DES_PROFILE))
 
 des-lp: $(DES_LP_TARGETS)
 
+DES_ULP_PROFILE=R2 R3 R3-homing R4 R2L R3L R4L R2R R3R R4R
+
+DES_ULP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix things/DES-uLP-,$(DES_ULP_PROFILE)))
+
+des-ulp: $(DES_ULP_TARGETS)
+
+des-ulp-index: things/DES-uLP-$(KEYBOARD)-index-array.$(FORMAT)
+
+des-ulp-index-solo: $(addsuffix .$(FORMAT),$(addprefix things/DES-uLP-$(KEYBOARD)-index-,$(TPKEYS)))
+
 
 RAW_CS_PROFILE=$(CS_PROFILE) R4 R4R
 RAW_CS_TARGETS=$(addsuffix .$(FORMAT),$(addprefix $(RAWDIR)/CS/,$(RAW_CS_PROFILE)))
@@ -75,7 +85,11 @@ RAW_DES_LP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix $(RAWDIR)/DES-LP/,$(DES_PR
 
 raw-des-lp: $(RAW_DES_LP_TARGETS)
 
-raw: raw-cs raw-des-lp
+RAW_DES_ULP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix $(RAWDIR)/DES-uLP/,$(DES_ULP_PROFILE)))
+
+raw-des-ulp: $(RAW_DES_ULP_TARGETS)
+
+raw: raw-cs raw-des-lp raw-des-ulp
 
 $(RAWDIR)/%/:
 	mkdir -p $@
@@ -117,11 +131,26 @@ things/DES-LP-%.$(FORMAT): DES-LP/DES-LP.scad
 	$(OPENSCAD) $(SCADFLAGS) --render -d .des-lp-$*.depends -Dkeycap=\"$*\" -o $@ $<
 
 
+things/DES-uLP-%.$(FORMAT): DES-uLP/DES-uLP.scad
+	$(OPENSCAD) $(SCADFLAGS) --render -d .des-ulp-$*.depends -Dkeycap=\"$*\" -o $@ $<
+
+
+things/DES-uLP-$(KEYBOARD)-index-array.$(FORMAT): DES-uLP/DES-uLP.scad
+	$(OPENSCAD) $(SCADFLAGS) --render -d .des-ulp-index-array.depends -Dindex=true -o $@ $<
+
+things/DES-uLP-$(KEYBOARD)-index-%.$(FORMAT): DES-uLP/DES-uLP.scad
+	$(OPENSCAD) $(SCADFLAGS) --render -d .des-ulp-index-$*.depends -Dindex=true -Dtpkey=\"$*\" -o $@ $<
+
+
 $(RAWDIR)/CS/%.$(FORMAT): CS/CS.scad | $(RAWDIR)/CS/
 	$(OPENSCAD) $(SCADFLAGS) --render -d .cs-$*.depends -Dkeycap=\"$*\" -Draw=true -o $@ $<
 
 $(RAWDIR)/DES-LP/%.$(FORMAT): DES-LP/DES-LP.scad | $(RAWDIR)/DES-LP/
 	$(OPENSCAD) $(SCADFLAGS) --render -d .des-lp-$*.depends -Dkeycap=\"$*\" -Draw=true -o $@ $<
+
+$(RAWDIR)/DES-uLP/%.$(FORMAT): DES-uLP/DES-uLP.scad | $(RAWDIR)/DES-uLP/
+	$(OPENSCAD) $(SCADFLAGS) --render -d .des-ulp-$*.depends -Dkeycap=\"$*\" -Draw=true -o $@ $<
+
 
 
 includes/PseudoMakeMeKeyCapProfiles/skin.scad: includes/PseudoMakeMeKeyCapProfiles/list-comprehension-demos/skin.scad
