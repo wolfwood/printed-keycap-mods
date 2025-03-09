@@ -21,7 +21,7 @@ module DES(type="R3"){
   $fn=60;
 
   base = base_key(type, key_table);
-  homing = homing_key(type, key_table);
+  homing = is_homing_key(type, key_table);
 
   rotate([0,0, rotate_key(type, key_table) && !raw() ? 180 : 0])
     mirror([mirror_key(type, key_table) ? 1 : 0, 0, 0]) {
@@ -70,13 +70,15 @@ module printable(type, trim=true, noop=false, flip) {
 
 index = true;
 lateral = true;
-// for laterals, the notch facing up gives a cleaner notch,
-// but notch facing down gives a cleaner lateral chording edge
-notch_up = lateral && index ? false : true;
 
-function notch_up(x) =
-  let(x = is_undef(x) ? $x : x)
-  x > 0 ? !notch_up : notch_up;
+// for trackpoint keys, the notch facing up gives a cleaner notch,
+// but notch facing down gives a cleaner lateral chording edge
+// prioritize keycap surface over notch
+function notch_up(key, table) =
+  let(left_notch = $x < 0)
+  !is_lateral_key(key, table)
+  ? left_notch
+  : flip_key(key, table);
 
 function raw() = !is_undef(raw) && raw;
 
@@ -94,23 +96,30 @@ if (is_undef(keycap)) {
     if (is_undef(tpkey) || tpkey == "R2-near")
       let(keycap = tp_caps[0], $x=1,$y=-1)
         translate(is_undef(tpkey) ? [0,y_spacing,0] : [0, 0, 0])
-        printable(keycap, noop=raw(), flip = notch_up()) trackpoint_notch() DES(keycap);
+        printable(keycap, noop=raw(), flip = notch_up(keycap, key_table)) trackpoint_notch() DES(keycap);
 
     if (is_undef(tpkey) || tpkey == "R3-homing")
       let(keycap = tp_caps[1], $x=1,$y=1)
-        printable(keycap, noop=raw(), flip = notch_up()) trackpoint_notch() DES(keycap);
+        printable(keycap, noop=raw(), flip = notch_up(keycap, key_table)) trackpoint_notch() DES(keycap);
 
     if (is_undef(tpkey) || tpkey == "R2-far")
       let(keycap = tp_caps[2], $x=-1,$y=-1)
         translate(is_undef(tpkey) ? [x_spacing,stagger+y_spacing,0] : [0, 0, 0])
-        printable(keycap, noop=raw(), flip = notch_up()) trackpoint_notch() DES(keycap);
+        printable(keycap, noop=raw(), flip = notch_up(keycap, key_table)) trackpoint_notch() DES(keycap);
 
     if (is_undef(tpkey) || tpkey == "R3")
       let(keycap = tp_caps[3], $x=-1,$y=1)
         translate(is_undef(tpkey) ? [x_spacing,stagger,0] : [0, 0, 0])
-        printable(keycap, noop=raw(), flip = notch_up()) trackpoint_notch() DES(keycap);
+        printable(keycap, noop=raw(), flip = notch_up(keycap, key_table)) trackpoint_notch() DES(keycap);
   }
 } else {
-  printable(keycap, noop=raw())
-    DES(keycap);
+  if(is_trackpoint_key(keycap, key_table)) {
+    let($x=trackpoint_key_x(keycap, key_table), $y=trackpoint_key_y(keycap, key_table))
+      printable(keycap, noop=raw(), flip=notch_up(keycap, key_table))
+      trackpoint_notch()
+      DES(keycap);
+  } else {
+    printable(keycap, noop=raw())
+      DES(keycap);
+  }
 }
