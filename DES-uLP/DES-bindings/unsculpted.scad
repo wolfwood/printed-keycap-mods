@@ -22,7 +22,6 @@ module unsculpted_key(key="R3", homing=false) {
          crossSection  = false, // center cut to check internal
          homeDot = homing, //turn on homedots
          Legends=false,
-         fdm = false
          );
 }
 
