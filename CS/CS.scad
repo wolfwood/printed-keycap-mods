@@ -116,11 +116,18 @@ function lookup_sculpt(type) =
   name2id_convex(type) >= 0 ? invert * lookup_convex_sculpt(type) :
   assert(false, str("invalid CS key type: ", type));
 
+function lookup_width(type) =
+  let(type = base_key(type, key_table))
+  name2id_sculpted(type) >= 0 ? lookup_sculpted_width(type) :
+  name2id_thumb(type) >= 0 ? lookup_thumb_width(type) :
+  name2id_convex(type) >= 0 ? lookup_convex_width(type) :
+  assert(false, str("invalid CS key type: ", type));
+
 module printable(type, trim=true, reverse_sculpt=false, noop=false, flip) {
   _printable_choc(angle = 55,
                   surface_contact = 1.5,
                   surface_contact_stem = 1,
-                  width = (type == "T015R" || type == "T0175R" || type == "T02R" ||  type == "T015L" || type == "T0175L" || type == "T02L" || type == "T15R" || type == "T15L") ? 15.65 /*15.923*/ : 17.2,
+                  width = lookup_width(type),
                   sculpt_compensate = lookup_sculpt(type),
                   type = type,
                   flip = is_undef(flip) ? flip_key(type, key_table) : flip,

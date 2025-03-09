@@ -34,7 +34,7 @@ module printable(type, trim=true, noop=false, flip) {
   _printable_choc(angle = 50,
                   surface_contact = 1.5,
                   surface_contact_stem = .75,
-                  width = 17.16 + 0.89,
+                  width = lookup_sculpted_width(type) + 0.89,
                   stem_depth = 1.4,
                   sculpt_compensate =  invert * -lookup_sculpted_sculpt(type),
                   type = type,

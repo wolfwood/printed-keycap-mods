@@ -25,5 +25,6 @@ module sculpted_key(key="R3", homing=false) {
 }
 
 function lookup_sculpted_sculpt(key) = XAngleSkew(name2id_sculpted(key));
+function lookup_sculpted_width(key) = BottomWidth(name2id_sculpted(key));
 
 sculpted_key();

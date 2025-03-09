@@ -42,15 +42,20 @@ function lookup_sculpt(type) =
   name2id_chord(type) >= 0 ? invert * lookup_chord_sculpt(type) :
   assert(false, str("invalid DES-uLP key type: ", type));
 
+function lookup_width(type) =
+  let(type = base_key(type, key_table))
+  name2id_unsculpted(type) >= 0 ? lookup_unsculpted_width(type) :
+  name2id_chord(type) >= 0 ? lookup_chord_width(type) :
+  assert(false, str("invalid CS key type: ", type));
+
 module printable(type, trim=true, noop=false, flip) {
   _printable_choc(
                   // anywhere between 45 and 60 is reasonable, but I was happiest with 50 or 55
                   angle = 50,
                   surface_contact = 1.5,
                   surface_contact_stem = .75,
-                   // XXX won't work for wide keys
-                  // lookup keycap width (and add .89 for some reason?) instead of hardcoding
-                  width = 17.16 + 0.89,
+                  // add .89 for some reason?
+                  width = lookup_width(type) + 0.89,
                   stem_depth = 1.4,
                   sculpt_compensate = lookup_sculpt(type),
                   type = type,
