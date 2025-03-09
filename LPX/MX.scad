@@ -42,4 +42,8 @@ module LPxMX(stem_h=3.6, pos=[0,0,0], slop=.2) {
 
 speed = true;
 offset=0;
-printable() LPxMX(pos=[0,offset,0]);
+
+function raw() = !is_undef(raw) && raw;
+
+
+printable(noop=raw()) LPxMX(pos=[0,offset,0]);

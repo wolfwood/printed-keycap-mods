@@ -24,6 +24,6 @@ module convex_key(key="R3x", homing=false) {
 	 );
 }
 
-function lookup_sculpted_convex(key) = XAngleSkew(name2id(key));
+function lookup_convex_sculpt(key) = XAngleSkew(name2id_convex(key));
 
 convex_key();

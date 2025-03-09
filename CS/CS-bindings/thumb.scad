@@ -1,19 +1,19 @@
 use <../../includes/PseudoMakeMeKeyCapProfiles/Choc_Chicago_Steno_Thumb.scad>;
 
 function name2id_thumb(key) =
-  key == "T1"    ?  2 :
-  key == "T15"   ?  3 :
-  key == "T0"    ? 15 :
-  key == "T015"  ? 16 :
-  key == "T02"   ? 17 :
-  key == "T0175" ? 18 :
-  key == "TW15"  ? 19 :
-  key == "TW015" ? 20 :
-  key == "R2L"   ?  0 :
-  key == "R3L"   ?  1 :
+  key == "T1L"    ?  2 :
+  key == "T15L"   ?  3 :
+  key == "T0L"    ? 15 :
+  key == "T015L"  ? 16 :
+  key == "T02L"   ? 17 :
+  key == "T0175L" ? 18 :
+  key == "TW15L"  ? 19 :
+  key == "TW015L" ? 20 :
+  key == "R3L"    ?  1 :
+  key == "R4L"    ?  0 :
   -1;
 
-module thumb_key(key="T1", homing=false) {
+module thumb_key(key="T1R", homing=false) {
   keyID = name2id_thumb(key);
 
   if (keyID < 0)

@@ -1,12 +1,43 @@
-use <../util/printable.scad>;
 use <../trackpoint_notch.scad>;
 include <../settings.scad>;
+use <../util/printable.scad>;
+use <../util/key-table.scad>;
+use <../util/logic.scad>;
 
 use <CS-bindings/sculpted.scad>;
 use <CS-bindings/thumb.scad>;
 use <CS-bindings/convex.scad>;
 
 prerendered=false;
+
+
+// only deviations need to be listed
+key_table = [
+             // type       mirror rotate  other  base
+             ["R2",        false, true, false,  "R4"],
+
+             //["R3-homing", false, false, false],
+             //["R2L",       false, false, true, ""],
+             //["R3L",       false, false, true],
+             //["R4L",       false, false, true],
+
+             ["R3R",       true,  false, false, "R3L"],
+             ["R2R",       false, true,  false, "R4L"],
+             ["R4R",       true,  false, false, "R4L"],
+             ["R2L",       true,  true,  true,  "R4L"],
+
+             ["T1R",       true,  false, false, "T1L"],
+             ["T15R",      true,  false, false, "T15L"],
+
+             ["T0R",       true,  false, false, "T0L"],
+             ["T015R",     true,  false, false, "T015L"],
+             ["T0175R",    true,  false, false, "T0175L"],
+             ["T02R",      true,  false, false, "T02L"],
+
+             ["TW15R",     true,  false, false, "TW15L"],
+             ["TW015R",    true,  false, false, "TW015L"],
+             ];
+
 
 module CS(type="R3") {
   if (prerendered) {
@@ -29,77 +60,23 @@ module invert_offset(x=true, y=true, z=false) {
 module CS_from_source(type="R3") {
   $fn=60;
 
-  if (type == "R3") {
-    sculpted_key(type);
-  } else if (type == "R3-homing") {
-    sculpted_key("R3", homing=true);
-  } else if (type == "R2") {
-    mirror([0,1,0]) sculpted_key("R4");
-  } else if (type == "R4") {
-    invert_offset() sculpted_key(type);
-  } else if (type == "R2L"){
-    mirror([1,0,0]) invert_offset(y=false) thumb_key("R2L");
-  } else if( type == "R4R") {
-    mirror([1,0,0]) invert_offset(x=false) thumb_key("R2L");
-  } else if (type == "R3L" || type == "R3L-homing"){
-    // smoother feel if you don't print with the curved side at the top
-    rotate([0,0,180])
-      invert_offset()
-      thumb_key("R3L", homing = type == "R3L-homing");
-  } else if (type == "R3R") {
-    // smoother feel if you don't print with the curved side at the top
-    rotate([0,0,180])
-      thumb_key("R3L");
-  } else if (type == "R4L") {
-    // smoother feel if you don't print with the curved side at the top
-    rotate([0,0,180]) invert_offset() thumb_key("R2L");
-  } else if (type == "R2R") {
-    // smoother feel if you don't print with the curved side at the top
-    rotate([0,0,180]) thumb_key("R2L");
-  } else if (type == "T1L") {
-    // smoother feel if you don't print with the curved side at the top
-    rotate([0,0,180]) invert_offset() thumb_key("T1");
-  } else if (type == "T1R") {
-    mirror([1,0,0]) invert_offset(x=false) thumb_key("T1");
-  } else if (type == "T15L") {
-    // smoother feel if you don't print with the curved side at the top
-    rotate([0,0,180]) invert_offset() thumb_key("T15");
-  } else if (type == "T15R") {
-    mirror([1,0,0]) invert_offset(x=false) thumb_key("T15");
-  } else if (type == "T0L") {
-    // smoother feel if you don't print with the curved side at the top
-     rotate([0,0,180]) invert_offset() thumb_key("T0");
-  } else if (type == "T0R") {
-    mirror([1,0,0]) invert_offset(x=false) thumb_key("T0");
-  } else if (type == "T015L") {
-    // smoother feel if you don't print with the curved side at the top
-     rotate([0,0,180]) invert_offset() thumb_key("T015");
-  } else if (type == "T015R") {
-    mirror([1,0,0]) invert_offset(x=false) thumb_key("T015");
-  } else if (type == "T0175L") {
-    // smoother feel if you don't print with the curved side at the top
-     rotate([0,0,180]) invert_offset() thumb_key("T0175");
-  } else if (type == "T0175R") {
-    mirror([1,0,0]) invert_offset(x=false) thumb_key("T0175");
-  } else if (type == "T02L") {
-    // smoother feel if you don't print with the curved side at the top
-     rotate([0,0,180]) invert_offset() mirror([0,1,0]) thumb_key("T02");
-  } else if (type == "T02R") {
-    mirror([1,0,0]) invert_offset(x=false) mirror([0,1,0])  thumb_key("T02");
-  } else if (type == "TW15L") {
-    // smoother feel if you don't print with the curved side at the top
-    rotate([0,0,180]) invert_offset() thumb_key("TW15");
-  } else if (type == "TW15R") {
-    mirror([1,0,0]) invert_offset(x=false) thumb_key("TW15");
-  } else if (type == "TW015L") {
-    // smoother feel if you don't print with the curved side at the top
-     rotate([0,0,180]) invert_offset() thumb_key("TW015");
-  } else if (type == "TW015R") {
-    mirror([1,0,0]) invert_offset(x=false) thumb_key("TW015");
-  } else if (type == "R3x") {
-    convex_key(type);
-  } else {
-    assert(false, str("unrecognized Chicago Steno keycap type: ", type));
+  base = base_key(type, key_table);
+  r = rotate_key(type, key_table);
+  m = mirror_key(type, key_table);
+  homing = homing_key(type, key_table);
+
+  rotate([0,0, r ? 180 : 0])
+    mirror([m ? 1 : 0, 0, 0])
+    invert_offset(x = xor(r,m), y = r){
+    if (name2id_thumb(base) != -1) {
+      thumb_key(base, homing=homing);
+    } else if (name2id_sculpted(base) != -1) {
+      sculpted_key(base, homing=homing);
+    } else if (name2id_convex(base) != -1) {
+      convex_key(base, homing=homing);
+    } else {
+      assert(false, str("unrecognized CS keycap type: ", type, " base: ", base));
+    }
   }
 }
 
@@ -131,120 +108,71 @@ module CS_prerendered(type="R3") {
   }
 }
 
-function sculpt_compensate(type) =
-  name2id_scuplt(type) >= 0 ? lookup_sculpted_sculpt(type) * (type == "R2" ? -1 : 1) :
-  name2id_thumb(type) >= 0 ? lookup_thumb_sculpt(type) :
-  type == "R2R" || type == "R4L" ? -lookup_thumb_sculpt("R2L") :
-  type == "R4R" ? lookup_thumb_sculpt("R2L") :
-  type == "R3R" ? -lookup_thumb_sculpt("R3L") :
-  type == "T1R" ? lookup_thumb_sculpt("T1") :
-  type == "T1L" ? -lookup_thumb_sculpt("T1") :
-  type == "T15R" ? lookup_thumb_sculpt("T15") :
-  type == "T15L" ? -lookup_thumb_sculpt("T15") :
-  type == "T0R" ? lookup_thumb_sculpt("T0") :
-  type == "T0L" ? -lookup_thumb_sculpt("T0") :
-  type == "T015R" ? lookup_thumb_sculpt("T015") :
-  type == "T015L" ? -lookup_thumb_sculpt("T015") :
-  type == "T0175R" ? lookup_thumb_sculpt("T0175") :
-  type == "T0175L" ? -lookup_thumb_sculpt("T0175") :
-  type == "T02R" ? lookup_thumb_sculpt("T02") :
-  type == "T02L" ? -lookup_thumb_sculpt("T02") :
-  type == "TW15R" ? lookup_thumb_sculpt("TW15") :
-  type == "TW15L" ? -lookup_thumb_sculpt("TW15") :
-  type == "TW015R" ? lookup_thumb_sculpt("TW015") :
-  type == "TW015L" ? -lookup_thumb_sculpt("TW015") :
-  name2id_convex(type) >= 0 ? lookup_sculpted_convex(type) :
+function lookup_sculpt(type) =
+  let(invert = rotate_key(type, key_table) ? -1 : 1,
+      type = base_key(type, key_table))
+  name2id_sculpted(type) >= 0 ? invert * lookup_sculpted_sculpt(type) :
+  name2id_thumb(type) >= 0 ? invert * lookup_thumb_sculpt(type) :
+  name2id_convex(type) >= 0 ? invert * lookup_convex_sculpt(type) :
   assert(false, str("invalid CS key type: ", type));
 
-module printable(type, other=false, trim=true, reverse_sculpt=false, noop=false) {
+module printable(type, trim=true, reverse_sculpt=false, noop=false, flip) {
   _printable_choc(angle = 55,
-             surface_contact = 1.5,
-             surface_contact_stem = 1,
-             width = (type == "T015R" || type == "T0175R" || type == "T02R" ||  type == "T015L" || type == "T0175L" || type == "T02L" || type == "T15R" || type == "T15L") ? 15.65 /*15.923*/ : 17.2,
-             sculpt_compensate = sculpt_compensate(type) * (reverse_sculpt ? -1 : 1),
-             type=type,
-             other=other,
-             trim=trim,
-             noop=noop)
+                  surface_contact = 1.5,
+                  surface_contact_stem = 1,
+                  width = (type == "T015R" || type == "T0175R" || type == "T02R" ||  type == "T015L" || type == "T0175L" || type == "T02L" || type == "T15R" || type == "T15L") ? 15.65 /*15.923*/ : 17.2,
+                  sculpt_compensate = lookup_sculpt(type),
+                  type = type,
+                  flip = is_undef(flip) ? flip_key(type, key_table) : flip,
+                  trim = trim,
+                  noop = noop)
     children();
 }
 
-index = false;
-lateral=true;
-// for laterals, the notch facing up fives a cleaner notch,
-// but notch facing down gives a cleaner lateral chrording edge
-notch_up = false;
+
+//keycap = "R4R";
+
+index = true;
+lateral = true;
+// for laterals, the notch facing up gives a cleaner notch,
+// but notch facing down gives a cleaner lateral chording edge
+notch_up = lateral && index ? false : true;
+
+function notch_up(x) =
+  let(x = is_undef(x) ? $x : x)
+  x > 0 ? !notch_up : notch_up;
+
+function raw() = !is_undef(raw) && raw;
+
+tp_caps = lateral ? index
+  ? ["R2L", "R3L", "R2R", "R3R"]
+  : ["R2R", "R3R", "R2", "R3"]
+  : ["R2", "R3", "R2", "R3"];
+
 
 if (is_undef(keycap)) {
-  let(x_spacing = is_list(grid_spacing) ? grid_spacing.x : grid_spacing, y_spacing = is_list(grid_spacing) ? grid_spacing.y : grid_spacing, stagger = is_undef(grid_stagger) ? 0 : grid_stagger ? y_spacing/2 : 0) {
-    if (!index) { // middle
-      if (is_undef(tpkey) || tpkey == "R3-homing")
-        let (tpkey =  homing_dots() ? "R3-homing" : "R3")
-          printable(tpkey, noop=raw())
-          trackpoint_notch(far=true) CS(tpkey);
-      if (is_undef(tpkey) || tpkey == "R2-near")
-        translate(is_undef(tpkey) ? [0,y_spacing,0] : [0,0,0])
-          let (tpkey = "R2R")
-          printable(tpkey, noop=raw())
-          trackpoint_notch(far=false) CS(tpkey);
-      if (is_undef(tpkey) || tpkey == "R3")
-        translate(is_undef(tpkey) ? [x_spacing,stagger,0] : [0,0,0])
-          let (tpkey = "R3R")
-          printable(tpkey, other=true, noop=raw())
-          mirror([1,0,0])
-          trackpoint_notch(far=false, index=true) CS(tpkey);
-      if (is_undef(tpkey) || tpkey == "R2-far")
-        translate(is_undef(tpkey) ? [x_spacing,stagger+y_spacing,0] : [0,0,0])
-          let (tpkey = "R2")
-          printable(tpkey, other=true, noop=raw())
-          mirror([1,0,0])
-          trackpoint_notch(far=true, index=true) CS(tpkey);
+  let(x_spacing = is_list(grid_spacing) ? grid_spacing.x : grid_spacing,
+      y_spacing = is_list(grid_spacing) ? grid_spacing.y : grid_spacing,
+      stagger = is_undef(grid_stagger) ? 0 : grid_stagger ? y_spacing/2 : 0) {
 
-    } else { // index
-      if (!lateral) {
-        if (is_undef(tpkey) || tpkey == "R3-homing")
-          let (tpkey =  homing_dots() ? "R3-homing" : "R3")
-            printable(tpkey, other=true, noop=raw())
-            trackpoint_notch($x=-1,$y=1,far=false, index=true)
-            CS(tpkey);
-        if (is_undef(tpkey) || tpkey == "R2-far")
-          translate(is_undef(tpkey) ? [0,y_spacing,0] : [0,0,0])
-            let (tpkey = "R2")
-            printable(tpkey, other=true, noop=raw())
-            trackpoint_notch($x=-1,$y=-1,far=true)
-            CS(tpkey);
-        if (is_undef(tpkey) || tpkey == "R3")
-          translate(is_undef(tpkey) ? [x_spacing,stagger,0] : [0,0,0])
-            let (tpkey = "R3")
-            printable(tpkey, noop=raw())
-            trackpoint_notch($x=1,$y=1,far=true) CS(tpkey);
-        if (is_undef(tpkey) || tpkey == "R2-near")
-          translate(is_undef(tpkey) ? [x_spacing,stagger+y_spacing,0] : [0,0,0])
-            let (tpkey = "R2")
-            printable(tpkey, noop=raw())
-            trackpoint_notch($x=1,$y=-1,far=false) CS(tpkey);
-      } else {
-        if (is_undef(tpkey) || tpkey == "R3-homing")
-          let (tpkey =  /*homing_dots() ? "R3L-homing" :*/ "R3R")
-            printable(tpkey, other=notch_up, noop=raw())
-            trackpoint_notch($x=-1,$y=1,far=false) CS("R3R");
-        if (is_undef(tpkey) || tpkey == "R2-far")
-          translate(is_undef(tpkey) ? [0,y_spacing,0] : [0,0,0])
-            let (tpkey = "R2R")
-            printable(tpkey, other=notch_up, noop=raw())
-            trackpoint_notch($x=-1,$y=-1, far=true) CS(tpkey);
-        if (is_undef(tpkey) || tpkey == "R3")
-          translate(is_undef(tpkey) ? [x_spacing,stagger,0] : [0,0,0])
-            let (tpkey = "R3L")
-            printable(tpkey, other=!notch_up, noop=raw())
-            trackpoint_notch($x=1,$y=1,far=true) rotate([0,0,180]) CS("R3L");
-        if (is_undef(tpkey) || tpkey == "R2-near")
-          translate(is_undef(tpkey) ? [x_spacing,stagger+y_spacing,0] : [0,0,0])
-            let (tpkey = "R2L")
-            printable(tpkey, other=!notch_up, reverse_sculpt=true, noop=raw())
-            trackpoint_notch($x=1,$y=-1,far=false) rotate([0,0,180]) CS(tpkey);
-      }
-    }
+    if (is_undef(tpkey) || tpkey == "R2-near")
+      let(keycap = tp_caps[0], $x=1,$y=-1)
+        translate(is_undef(tpkey) ? [0,y_spacing,0] : [0, 0, 0])
+        printable(keycap, noop=raw(), flip = notch_up()) trackpoint_notch() CS(keycap);
+
+    if (is_undef(tpkey) || tpkey == "R3-homing")
+      let(keycap = tp_caps[1], $x=1,$y=1)
+        printable(keycap, noop=raw(), flip = notch_up()) trackpoint_notch() CS(keycap);
+
+    if (is_undef(tpkey) || tpkey == "R2-far")
+      let(keycap = tp_caps[2], $x=-1,$y=-1)
+        translate(is_undef(tpkey) ? [x_spacing,stagger+y_spacing,0] : [0, 0, 0])
+        printable(keycap, noop=raw(), flip = notch_up()) trackpoint_notch() CS(keycap);
+
+    if (is_undef(tpkey) || tpkey == "R3")
+      let(keycap = tp_caps[3], $x=-1,$y=1)
+        translate(is_undef(tpkey) ? [x_spacing,stagger,0] : [0, 0, 0])
+        printable(keycap, noop=raw(), flip = notch_up()) trackpoint_notch() CS(keycap);
   }
 } else {
   printable(keycap, noop=raw()) CS(keycap);

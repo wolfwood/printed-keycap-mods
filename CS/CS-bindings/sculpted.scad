@@ -1,12 +1,12 @@
 use <../../includes/PseudoMakeMeKeyCapProfiles/Choc_Chicago_Steno.scad>;
 
-function name2id_scuplt(key) =
+function name2id_sculpted(key) =
   key == "R2" || key == "R4" ? 0 :
   key == "R3" || key == "R3-homing" ? 1 :
   -1;
 
 module sculpted_key(key="R3", homing=false) {
-  keyID = name2id_scuplt(key);
+  keyID = name2id_sculpted(key);
 
   if (keyID < 0)
       assert(false, str("invalid CS key ID: ", key));
@@ -24,6 +24,6 @@ module sculpted_key(key="R3", homing=false) {
 	 );
 }
 
-function lookup_sculpted_sculpt(key) = XAngleSkew(name2id_scuplt(key));
+function lookup_sculpted_sculpt(key) = XAngleSkew(name2id_sculpted(key));
 
 sculpted_key();

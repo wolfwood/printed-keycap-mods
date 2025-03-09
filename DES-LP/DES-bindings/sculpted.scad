@@ -1,6 +1,6 @@
 use <../../includes/PseudoMakeMeKeyCapProfiles/DES_chocstem.scad>;
 
-function name2id(key) =
+function name2id_sculpted(key) =
   key == "R1" ? 5 :
   key == "R2" ? 2 :
   key == "R3" ? 1 :
@@ -10,7 +10,7 @@ function name2id(key) =
   assert(false, str("invalid CS key ID: ", key));
 
 module sculpted_key(key="R3", homing=false) {
-  keyID = name2id(key);
+  keyID = name2id_sculpted(key);
 
   keycap(keyID   = keyID, //change profile refer to KeyParameters Struct
      cutLen  = 0, //Don't change. for chopped caps
@@ -24,6 +24,6 @@ module sculpted_key(key="R3", homing=false) {
      );
 }
 
-function lookup_sculpted_sculpt(key) = XAngleSkew(name2id(key));
+function lookup_sculpted_sculpt(key) = XAngleSkew(name2id_sculpted(key));
 
 sculpted_key();
