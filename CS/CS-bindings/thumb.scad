@@ -27,7 +27,7 @@ module thumb_key(key="T1R", homing=false) {
 	 Stab    = 0,
 	 visualizeDish = false, // turn on debug visual of Dish
 	 crossSection  = false, // center cut to check internal
-	 homeDot = false, //turn on homedots
+	 homeDot = homing, //turn on homedots
 	 Legends = false
 	 );
 }
