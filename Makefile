@@ -19,15 +19,17 @@ FORMAT = 3mf
 
 KEYBOARD != perl -n -e'/^keyboard\s*=\s*"(\S+)"/ && print $$1' < settings.scad
 
-most: lpx cs-middle cs-index
+most: lpx cs des-ulp
 
-choc:lpx cs lpx-offset
+choc:lpx cs lpx-offset des-lp des-ulp
 
 mx: lpxmx
 
-all: most choc mx cs-middle-solo cs-index-solo lpx-offset des-lp des-ulp des-ulp-index des-ulp-index-solo
+tp: lpx cs-tp des-lp-tp des-ulp-tp
 
-.PHONY: lpx cs-middle cs-index most cs cs-middle-solo cs-index-solo choc mx all
+all: most choc mx lpx-offset tp
+
+.PHONY: lpx most cs des-lp des-ulp choc mx all raw raw-cs raw-des-lp raw-des-ulp
 
 lpx: things/LPX-$(KEYBOARD)-near.$(FORMAT) things/LPX-$(KEYBOARD)-far.$(FORMAT)
 
@@ -38,58 +40,67 @@ OFFSET=1.0 0.5
 LPXOFFSET=$(addsuffix .$(FORMAT),$(addprefix things/LPX-offset-,$(OFFSET)))
 lpx-offset: $(LPXOFFSET)
 
-TPKEYS=R3-homing R3 R2-near R2-far
+KEYS=R2 R3 R4 R3-homing
+LATS=R2L R3L R4L R2R R3R R4R R3L-homing R3R-homing
+TPKEYS=R2-SE R2-SW R3-NE R3-NW
+#R2-SE R2-SW R3-NE R3-NW R3-SE R3-SW R4-NE R4-NW R3-homing-NE R3-homing-NW R3-homing-SE R3-homing-SW
+TPLATS=R2L-SE R2R-SW R3L-NE R3R-NW
+#R2L-SE R2L-SW R2R-SE R2R-SW R3L-NE R3L-NW R3L-SE R3R-SW R3R-NE R3R-NW R3R-SE R3R-SW R4L-NE R4L-NW R4R-NE R4R-NW R3L-homing-NE R3L-homing-NW R3L-homing-SE R3L-homing-SW R3R-homing-NE R3R-homing-NW R3R-homing-SE R3R-homing-SW
 
-cs-middle: things/CS-$(KEYBOARD)-middle-array.$(FORMAT)
-
-cs-middle-solo: $(addsuffix .$(FORMAT),$(addprefix things/CS-$(KEYBOARD)-middle-,$(TPKEYS)))
-
-cs-index: things/CS-$(KEYBOARD)-index-array.$(FORMAT)
-
-cs-index-solo: $(addsuffix .$(FORMAT),$(addprefix things/CS-$(KEYBOARD)-index-,$(TPKEYS)))
-
-CS_TP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix things/CS-$(KEYBOARD)-middle-,$(TPKEYS))) $(addsuffix .$(FORMAT),$(addprefix things/CS-$(KEYBOARD)-index-,$(TPKEYS)))
-
-# skipping redundant key sculpts: R4 R2R R3R R4R
-CS_PROFILE=R2 R3 R3-homing R2L R3L R4L T1L T1R T0L T0R R3x T015L T015R T0175L T0175R T02L T02R T15L T15R TW15L TW15R TW015L TW015R
+# for CS R4 R2R R3R and R4R are mostly redundant for printing, but including them is less surprising
+CS_PROFILE=$(KEYS) $(LATS) T1L T1R T0L T0R R3x T015L T015R T0175L T0175R T02L T02R T15L T15R TW15L TW15R TW015L TW015R
+CS_TP_PROFILE=$(TPKEYS) $(TPLATS)
 
 CS_TARGETS=$(addsuffix .$(FORMAT),$(addprefix things/CS-,$(CS_PROFILE)))
+CS_TP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix things/CS-,$(CS_TP_PROFILE)))
 
 cs: $(CS_TARGETS)
+cs-tp: $(CS_TP_TARGETS)
 
 CS/CS.scad: includes/PseudoMakeMeKeyCapProfiles/skin.scad includes/PseudoMakeMeKeyCapProfiles/sweep.scad
 
-DES_PROFILE=R2 R3 R3-homing R4 # R1 R5
+DES_LP_PROFILE=$(KEYS) # R1 R5
+DES_LP_TP_PROFILE= $(TPKEYS)
 
-DES_LP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix things/DES-LP-,$(DES_PROFILE)))
+DES_LP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix things/DES-LP-,$(DES_LP_PROFILE)))
+DES_LP_TP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix things/DES-LP-,$(DES_LP_TP_PROFILE)))
 
 des-lp: $(DES_LP_TARGETS)
+des-lp-tp: $(DES_LP_TP_TARGETS)
 
-DES_ULP_PROFILE=R2 R3 R3-homing R4 R2L R3L R4L R2R R3R R4R
+DES_ULP_PROFILE=$(KEYS) $(LATS)
+DES_ULP_TP_PROFILE=$(TPKEYS) $(TPLATS)
 
 DES_ULP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix things/DES-uLP-,$(DES_ULP_PROFILE)))
+DES_ULP_TP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix things/DES-uLP-,$(DES_ULP_TP_PROFILE)))
 
 des-ulp: $(DES_ULP_TARGETS)
-
-des-ulp-index: things/DES-uLP-$(KEYBOARD)-index-array.$(FORMAT)
-
-des-ulp-index-solo: $(addsuffix .$(FORMAT),$(addprefix things/DES-uLP-$(KEYBOARD)-index-,$(TPKEYS)))
+des-ulp-tp: $(DES_ULP_TP_TARGETS)
 
 
-RAW_CS_PROFILE=$(CS_PROFILE) R4 R4R
+RAW_CS_PROFILE=$(CS_PROFILE)
 RAW_CS_TARGETS=$(addsuffix .$(FORMAT),$(addprefix $(RAWDIR)/CS/,$(RAW_CS_PROFILE)))
+RAW_CS_TP_PROFILE=$(TPKEYS) $(TPLATS)
+RAW_CS_TP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix $(RAWDIR)/CS/,$(RAW_CS_TP_PROFILE)))
 
 raw-cs: $(RAW_CS_TARGETS)
+raw-cs-tp: $(RAW_CS_TP_TARGETS)
 
-RAW_DES_LP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix $(RAWDIR)/DES-LP/,$(DES_PROFILE)))
+RAW_DES_LP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix $(RAWDIR)/DES-LP/,$(DES_LP_PROFILE)))
+RAW_DES_LP_TP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix $(RAWDIR)/DES-LP/,$(DES_LP_TP_PROFILE)))
 
 raw-des-lp: $(RAW_DES_LP_TARGETS)
+raw-des-lp-tp: $(RAW_DES_LP_TP_TARGETS)
 
 RAW_DES_ULP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix $(RAWDIR)/DES-uLP/,$(DES_ULP_PROFILE)))
+RAW_DES_ULP_TP_TARGETS=$(addsuffix .$(FORMAT),$(addprefix $(RAWDIR)/DES-uLP/,$(DES_ULP_TP_PROFILE)))
 
 raw-des-ulp: $(RAW_DES_ULP_TARGETS)
+raw-des-ulp-tp: $(RAW_DES_ULP_TP_TARGETS)
 
 raw: raw-cs raw-des-lp raw-des-ulp
+raw-tp: raw-cs-tp raw-des-lp-tp raw-des-ulp-tp
+
 
 $(RAWDIR)/%/:
 	mkdir -p $@
@@ -103,22 +114,8 @@ things/LPX-$(KEYBOARD)-near.$(FORMAT): LPX/LPX.scad
 things/LPX-$(KEYBOARD)-far.$(FORMAT): LPX/LPX.scad
 	$(OPENSCAD) $(SCADFLAGS) --hardwarnings --render -d .lpx-far.depends -Dfar=true -o $@ $<
 
-things/CS-$(KEYBOARD)-middle-array.$(FORMAT): CS/CS.scad
-	$(OPENSCAD) $(SCADFLAGS) --render  -d .cs-middle-array.depends -Dindex=false -o $@ $<
-
-things/CS-$(KEYBOARD)-index-array.$(FORMAT): CS/CS.scad
-	$(OPENSCAD) $(SCADFLAGS) --render -d .cs-index-array.depends -Dindex=true -o $@ $<
-
-things/CS-$(KEYBOARD)-middle-%.$(FORMAT): CS/CS.scad
-	$(OPENSCAD) $(SCADFLAGS) --render  -d .cs-middle-$*.depends -Dindex=false  -Dtpkey=\"$*\" -o $@ $<
-
-things/CS-$(KEYBOARD)-index-%.$(FORMAT): CS/CS.scad
-	$(OPENSCAD) $(SCADFLAGS) --render -d .cs-index-$*.depends -Dindex=true -Dtpkey=\"$*\" -o $@ $<
-
-
 things/LPxMX.$(FORMAT): LPX/MX.scad
 	$(OPENSCAD) $(SCADFLAGS) --hardwarnings --render -d .lpxmx.depends -o $@ $<
-
 
 things/LPX-offset-%.$(FORMAT): LPX/LPX.scad
 	$(OPENSCAD) $(SCADFLAGS) --hardwarnings --render -d .lpx-offset-$*.depends -Dspeed=false -Doffset=$* -o $@ $<
@@ -127,19 +124,13 @@ things/LPX-offset-%.$(FORMAT): LPX/LPX.scad
 things/CS-%.$(FORMAT): CS/CS.scad
 	$(OPENSCAD) $(SCADFLAGS) --render -d .cs-$*.depends -Dkeycap=\"$*\" -o $@ $<
 
+
 things/DES-LP-%.$(FORMAT): DES-LP/DES-LP.scad
 	$(OPENSCAD) $(SCADFLAGS) --render -d .des-lp-$*.depends -Dkeycap=\"$*\" -o $@ $<
 
 
 things/DES-uLP-%.$(FORMAT): DES-uLP/DES-uLP.scad
 	$(OPENSCAD) $(SCADFLAGS) --render -d .des-ulp-$*.depends -Dkeycap=\"$*\" -o $@ $<
-
-
-things/DES-uLP-$(KEYBOARD)-index-array.$(FORMAT): DES-uLP/DES-uLP.scad
-	$(OPENSCAD) $(SCADFLAGS) --render -d .des-ulp-index-array.depends -Dindex=true -o $@ $<
-
-things/DES-uLP-$(KEYBOARD)-index-%.$(FORMAT): DES-uLP/DES-uLP.scad
-	$(OPENSCAD) $(SCADFLAGS) --render -d .des-ulp-index-$*.depends -Dindex=true -Dtpkey=\"$*\" -o $@ $<
 
 
 $(RAWDIR)/CS/%.$(FORMAT): CS/CS.scad | $(RAWDIR)/CS/
@@ -161,7 +152,7 @@ includes/PseudoMakeMeKeyCapProfiles/sweep.scad: includes/PseudoMakeMeKeyCapProfi
 
 
 clean:
-	-rm .*.depends $(LPXMX) $(LPXOFFSET) $(CS_TARGETS) $(CS_TP_TARGETS) things/CS-$(KEYBOARD)-middle-array.$(FORMAT) things/CS-$(KEYBOARD)-index-array.$(FORMAT) things/LPX-$(KEYBOARD)-near.$(FORMAT) things/LPX-$(KEYBOARD)-far.$(FORMAT)
+	-rm .*.depends $(LPXMX) $(LPXOFFSET) $(CS_TARGETS) $(CS_TP_TARGETS) $(DES_LP_TARGETS) $(DES_LP_TP_TARGETS) $(DES_ULP_TARGETS) $(DES_ULP_TP_TARGETS) things/LPX-$(KEYBOARD)-near.$(FORMAT) things/LPX-$(KEYBOARD)-far.$(FORMAT)
 
 image:
 	exiftool -overwrite_original -recurse -EXIF= images
