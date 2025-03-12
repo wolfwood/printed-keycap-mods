@@ -66,6 +66,7 @@ function trackpoint_key_y(key, table) =
   : key[pos] == "S" ? -1
   : assert(false, str("not a trackpoint key: ", key));
 
+function pretrackpoint_key(key, table) = _detrackpoint_keyname(key, table);
 
 // removes prefixes from a key name
 function _root_keyname(key, table) =

@@ -14,6 +14,10 @@ ifeq ($(MANIFOLD_FEATURE), 0)
 endif
 endif
 
+# speeds up trackpoint notch cutting by more than an order of magnitude,
+# small time delay otherwise
+PRERENDERED=1
+
 # stl or 3mf are most common
 FORMAT = 3mf
 
@@ -102,6 +106,9 @@ raw: raw-cs raw-des-lp raw-des-ulp
 raw-tp: raw-cs-tp raw-des-lp-tp raw-des-ulp-tp
 
 
+things/:
+	mkdir -p $@
+
 $(RAWDIR)/%/:
 	mkdir -p $@
 
@@ -120,27 +127,42 @@ things/LPxMX.$(FORMAT): LPX/MX.scad
 things/LPX-offset-%.$(FORMAT): LPX/LPX.scad
 	$(OPENSCAD) $(SCADFLAGS) --hardwarnings --render -d .lpx-offset-$*.depends -Dspeed=false -Doffset=$* -o $@ $<
 
-
-things/CS-%.$(FORMAT): CS/CS.scad
-	$(OPENSCAD) $(SCADFLAGS) --render -d .cs-$*.depends -Dkeycap=\"$*\" -o $@ $<
-
-
-things/DES-LP-%.$(FORMAT): DES-LP/DES-LP.scad
-	$(OPENSCAD) $(SCADFLAGS) --render -d .des-lp-$*.depends -Dkeycap=\"$*\" -o $@ $<
+ifndef PRERENDERED
+things/CS-%.$(FORMAT): CS/CS.scad | things/
+	$(OPENSCAD) $(SCADFLAGS) --render -d .cs-$*.depends -Dkeycap=\"$*\" -Dprerendered=false -o $@ $<
 
 
-things/DES-uLP-%.$(FORMAT): DES-uLP/DES-uLP.scad
-	$(OPENSCAD) $(SCADFLAGS) --render -d .des-ulp-$*.depends -Dkeycap=\"$*\" -o $@ $<
+things/DES-LP-%.$(FORMAT): DES-LP/DES-LP.scad | things/
+	$(OPENSCAD) $(SCADFLAGS) --render -d .des-lp-$*.depends -Dkeycap=\"$*\" -Dprerendered=false -o $@ $<
 
+
+things/DES-uLP-%.$(FORMAT): DES-uLP/DES-uLP.scad | things/
+	$(OPENSCAD) $(SCADFLAGS) --render -d .des-ulp-$*.depends -Dkeycap=\"$*\" -Dprerendered=false -o $@ $<
+
+else
+.SECONDEXPANSION:
+things/CS-%.$(FORMAT): CS/CS.scad $(RAWDIR)/CS/$$(subst -NW,,$$(subst -NE,,$$(subst -SW,,$$(subst -SE,,%)))).$(FORMAT) | things/
+	$(OPENSCAD) $(SCADFLAGS) --render -d .cs-$*.depends -Dkeycap=\"$*\" -Dprerendered=true -Drawdir=\"$(RAWDIR)\" -Dformat=\"$(FORMAT)\" -o $@ $<
+
+
+.SECONDEXPANSION:
+things/DES-LP-%.$(FORMAT): DES-LP/DES-LP.scad $(RAWDIR)/DES-LP/$$(subst -NW,,$$(subst -NE,,$$(subst -SW,,$$(subst -SE,,%)))).$(FORMAT) | things/
+	$(OPENSCAD) $(SCADFLAGS) --render -d .des-lp-$*.depends -Dkeycap=\"$*\" -Dprerendered=true -Drawdir=\"$(RAWDIR)\" -Dformat=\"$(FORMAT)\" -o $@ $<
+
+
+.SECONDEXPANSION:
+things/DES-uLP-%.$(FORMAT): DES-uLP/DES-uLP.scad $(RAWDIR)/DES-uLP/$$(subst -NW,,$$(subst -NE,,$$(subst -SW,,$$(subst -SE,,%)))).$(FORMAT) | things/
+	$(OPENSCAD) $(SCADFLAGS) --render -d .des-ulp-$*.depends -Dkeycap=\"$*\" -Dprerendered=true -Drawdir=\"$(RAWDIR)\" -Dformat=\"$(FORMAT)\" -o $@ $<
+endif
 
 $(RAWDIR)/CS/%.$(FORMAT): CS/CS.scad | $(RAWDIR)/CS/
-	$(OPENSCAD) $(SCADFLAGS) --render -d .cs-$*.depends -Dkeycap=\"$*\" -Draw=true -o $@ $<
+	$(OPENSCAD) $(SCADFLAGS) --render -d .raw-cs-$*.depends -Dkeycap=\"$*\" -Draw=true -Dprerendered=false -o $@ $<
 
 $(RAWDIR)/DES-LP/%.$(FORMAT): DES-LP/DES-LP.scad | $(RAWDIR)/DES-LP/
-	$(OPENSCAD) $(SCADFLAGS) --render -d .des-lp-$*.depends -Dkeycap=\"$*\" -Draw=true -o $@ $<
+	$(OPENSCAD) $(SCADFLAGS) --render -d .raw-des-lp-$*.depends -Dkeycap=\"$*\" -Draw=true -Dprerendered=false -o $@ $<
 
 $(RAWDIR)/DES-uLP/%.$(FORMAT): DES-uLP/DES-uLP.scad | $(RAWDIR)/DES-uLP/
-	$(OPENSCAD) $(SCADFLAGS) --render -d .des-ulp-$*.depends -Dkeycap=\"$*\" -Draw=true -o $@ $<
+	$(OPENSCAD) $(SCADFLAGS) --render -d .raw-des-ulp-$*.depends -Dkeycap=\"$*\" -Draw=true -Dprerendered=false -o $@ $<
 
 
 

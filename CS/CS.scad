@@ -9,6 +9,8 @@ use <CS-bindings/thumb.scad>;
 use <CS-bindings/convex.scad>;
 
 prerendered=false;
+rawdir = "things/raw";
+format = "3mf";
 
 
 // only deviations need to be listed
@@ -81,31 +83,7 @@ module CS_from_source(type="R3") {
 }
 
 module CS_prerendered(type="R3") {
-  if (type == "R3") {
-    import("levs-CS/r3-middle-row.stl");
-  } else if (type == "R3-homing") {
-    import("levs-CS/r3-homing.stl");
-  } else if (type == "R2") {
-    rotate([0,0, 180]) import("levs-CS/r2r4-topbottom-rows.stl");
-  } else if (type == "R4") {
-    import("levs-CS/r2r4-topbottom-rows.stl");
-  } else if (type == "R2L" || type == "R4R") {
-    import("levs-CS/r2r4L-side-columns.stl");
-  } else if (type == "R3L" || type == "R3R") {
-    //rotate([0,0, 180])
-      import("levs-CS/r3L-side-columns.stl");
-  } else if (type == "R4L" || type == "R2R") {
-    mirror([0,1,0]) import("levs-CS/r2r4L-side-columns.stl");
-  } else if (type == "T1L") {
-    rotate([0,0,180])
-      mirror([1,0,0]) import("levs-CS/thumb-1u.stl");
-  } else if (type == "T1R") {
-    import("levs-CS/thumb-1u.stl");
-  } else if (type == "R3x") {
-    import("levs-CS/convex-1u-for-thumbs-or-inner-index-column.stl");
-  } else {
-    assert(false, str("unrecognized Chicago Steno keycap type: ", type));
-  }
+  import(str("../", rawdir, "/", "CS", "/", pretrackpoint_key(type, key_table), ".", format));
 }
 
 function lookup_sculpt(type) =

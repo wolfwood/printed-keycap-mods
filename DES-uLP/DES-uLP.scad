@@ -7,6 +7,11 @@ use <DES-bindings/unsculpted.scad>;
 use <DES-bindings/chord.scad>;
 
 
+prerendered=false;
+rawdir = "things/raw";
+format = "3mf";
+
+
 // only deviations need to be listed
 key_table = [
              // type       mirror rotate  flip  base
@@ -18,6 +23,15 @@ key_table = [
 
 
 module DES(type="R3"){
+  if(prerendered){
+    DES_prerendered(type);
+  } else {
+    DES_from_source(type);
+  }
+
+}
+
+module DES_from_source(type="R3"){
   $fn=60;
 
   base = base_key(type, key_table);
@@ -33,6 +47,10 @@ module DES(type="R3"){
       assert(false, str("unrecognized DES uLP keycap type: ", type, " base: ", base));
     }
   }
+}
+
+module DES_prerendered(type){
+  import(str("../", rawdir, "/", "DES-uLP", "/", pretrackpoint_key(type, key_table), ".", format));
 }
 
 function lookup_sculpt(type) =
