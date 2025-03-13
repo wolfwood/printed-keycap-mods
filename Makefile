@@ -1,5 +1,5 @@
 OPENSCAD=openscad
-SCADFLAGS = -q #--hardwarnings
+SCADFLAGS = -q --hardwarnings
 
 RAWDIR=things/raw
 
@@ -116,16 +116,16 @@ $(RAWDIR)/%/:
 
 
 things/LPX-$(KEYBOARD)-near.$(FORMAT): LPX/LPX.scad
-	$(OPENSCAD) $(SCADFLAGS) --hardwarnings --render -d .lpx-near.depends -Dfar=false -o $@ $<
+	$(OPENSCAD) $(SCADFLAGS) --render -d .lpx-near.depends -Dfar=false -o $@ $<
 
 things/LPX-$(KEYBOARD)-far.$(FORMAT): LPX/LPX.scad
-	$(OPENSCAD) $(SCADFLAGS) --hardwarnings --render -d .lpx-far.depends -Dfar=true -o $@ $<
+	$(OPENSCAD) $(SCADFLAGS) --render -d .lpx-far.depends -Dfar=true -o $@ $<
 
 things/LPxMX.$(FORMAT): LPX/MX.scad
-	$(OPENSCAD) $(SCADFLAGS) --hardwarnings --render -d .lpxmx.depends -o $@ $<
+	$(OPENSCAD) $(SCADFLAGS) --render -d .lpxmx.depends -o $@ $<
 
 things/LPX-offset-%.$(FORMAT): LPX/LPX.scad
-	$(OPENSCAD) $(SCADFLAGS) --hardwarnings --render -d .lpx-offset-$*.depends -Dspeed=false -Doffset=$* -o $@ $<
+	$(OPENSCAD) $(SCADFLAGS) --render -d .lpx-offset-$*.depends -Dspeed=false -Doffset=$* -o $@ $<
 
 ifndef PRERENDERED
 things/CS-%.$(FORMAT): CS/CS.scad | things/
