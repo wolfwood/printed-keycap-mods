@@ -8,6 +8,9 @@ use <CS-bindings/sculpted.scad>;
 use <CS-bindings/thumb.scad>;
 use <CS-bindings/convex.scad>;
 
+
+profile = "CS";
+
 prerendered=false;
 rawdir = "things/raw";
 format = "3mf";
@@ -77,13 +80,13 @@ module CS_from_source(type="R3") {
     } else if (name2id_convex(base) != -1) {
       convex_key(base, homing=homing);
     } else {
-      assert(false, str("unrecognized CS keycap type: ", type, " base: ", base));
+      assert(false, str("unrecognized ", profile, " keycap type: ", type, " base: ", base));
     }
   }
 }
 
 module CS_prerendered(type="R3") {
-  import(str("../", rawdir, "/", "CS", "/", pretrackpoint_key(type, key_table), ".", format));
+  import(str("../", rawdir, "/", profile, "/", pretrackpoint_key(type, key_table), ".", format));
 }
 
 function lookup_sculpt(type) =
@@ -92,14 +95,14 @@ function lookup_sculpt(type) =
   name2id_sculpted(type) >= 0 ? invert * lookup_sculpted_sculpt(type) :
   name2id_thumb(type) >= 0 ? invert * lookup_thumb_sculpt(type) :
   name2id_convex(type) >= 0 ? invert * lookup_convex_sculpt(type) :
-  assert(false, str("invalid CS key type: ", type));
+  assert(false, str("invalid ", profile, " key type: ", type));
 
 function lookup_width(type) =
   let(type = base_key(type, key_table))
   name2id_sculpted(type) >= 0 ? lookup_sculpted_width(type) :
   name2id_thumb(type) >= 0 ? lookup_thumb_width(type) :
   name2id_convex(type) >= 0 ? lookup_convex_width(type) :
-  assert(false, str("invalid CS key type: ", type));
+  assert(false, str("invalid ", profile, " key type: ", type));
 
 module printable(type, trim=true, reverse_sculpt=false, noop=false, flip) {
   _printable_choc(angle = 55,

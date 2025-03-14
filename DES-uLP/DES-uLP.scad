@@ -7,6 +7,8 @@ use <DES-bindings/unsculpted.scad>;
 use <DES-bindings/chord.scad>;
 
 
+profile = "DES-uLP";
+
 prerendered=false;
 rawdir = "things/raw";
 format = "3mf";
@@ -44,13 +46,13 @@ module DES_from_source(type="R3"){
     } else if (name2id_unsculpted(base) != -1) {
       unsculpted_key(base, homing=homing);
     } else {
-      assert(false, str("unrecognized DES uLP keycap type: ", type, " base: ", base));
+      assert(false, str("unrecognized ", profile, " keycap type: ", type, " base: ", base));
     }
   }
 }
 
 module DES_prerendered(type){
-  import(str("../", rawdir, "/", "DES-uLP", "/", pretrackpoint_key(type, key_table), ".", format));
+  import(str("../", rawdir, "/", profile, "/", pretrackpoint_key(type, key_table), ".", format));
 }
 
 function lookup_sculpt(type) =
@@ -58,13 +60,13 @@ function lookup_sculpt(type) =
       type = base_key(type, key_table))
   name2id_unsculpted(type) >= 0 ? invert * lookup_unsculpted_sculpt(type):
   name2id_chord(type) >= 0 ? invert * lookup_chord_sculpt(type) :
-  assert(false, str("invalid DES-uLP key type: ", type));
+  assert(false, str("invalid ", profile, " key type: ", type));
 
 function lookup_width(type) =
   let(type = base_key(type, key_table))
   name2id_unsculpted(type) >= 0 ? lookup_unsculpted_width(type) :
   name2id_chord(type) >= 0 ? lookup_chord_width(type) :
-  assert(false, str("invalid CS key type: ", type));
+  assert(false, str("invalid ", profile, " key type: ", type));
 
 module printable(type, trim=true, noop=false, flip) {
   _printable_choc(

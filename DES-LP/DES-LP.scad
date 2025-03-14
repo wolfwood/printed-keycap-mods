@@ -6,6 +6,8 @@ use <../util/key-table.scad>;
 use <DES-bindings/sculpted.scad>;
 
 
+profile = "DES-LP";
+
 prerendered=false;
 rawdir = "things/raw";
 format = "3mf";
@@ -36,13 +38,13 @@ module DES_from_source(type="R3"){
     if (name2id_sculpted(base) != -1) {
       sculpted_key(base, homing=homing);
     } else {
-      assert(false, str("unrecognized DES LP keycap type: ", type, " base: ", base));
+      assert(false, str("unrecognized ", profile, " keycap type: ", type, " base: ", base));
     }
   }
 }
 
 module DES_prerendered(type){
-  import(str("../", rawdir, "/", "DES-LP", "/", pretrackpoint_key(type, key_table), ".", format));
+  import(str("../", rawdir, "/", profile, "/", pretrackpoint_key(type, key_table), ".", format));
 }
 
 module printable(type, trim=true, noop=false, flip) {
