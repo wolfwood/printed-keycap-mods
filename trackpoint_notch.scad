@@ -62,7 +62,8 @@ module trackpoint_helper_dispatch(far, index, key_spacing, column_offset) {
 // for testing
 *trackpoint_notch(far = false, index = false) import("../tryadactyl/key/prerendered/cs/2L.stl");
 
-module rotational_projection(step=tp_rotational_steps(), a=90){
+
+module rotational_projection(step=tp_rotational_steps(), a=360){
   for(i=[0:step:a]){
     projection(cut=true)
       rotate([0,i,0])
@@ -71,6 +72,9 @@ module rotational_projection(step=tp_rotational_steps(), a=90){
 }
 
 module trackpoint_uniform_chamfer_helper(far=false, index=false, key_spacing, column_offset) {
+  $fa=3;
+  $fs=.1;
+
   // matches laptop keyboards
   chamfer_dia = 14;
 
@@ -107,7 +111,7 @@ module trackpoint_uniform_chamfer_helper(far=false, index=false, key_spacing, co
   module cylindrical_corner(dia=chamfer_dia) {
     intersection(){
       decenter_keycap() children();
-      cylinder($fn=60, d=dia, h=20, center=true);
+      cylinder(d=dia, h=20, center=true);
     }
   }
 
@@ -115,17 +119,17 @@ module trackpoint_uniform_chamfer_helper(far=false, index=false, key_spacing, co
     for(i=[step:step:chamfer_d]){
       difference(){
 	//translate([step, -step,.1]) cylindrical_corner(chamfer_dia-(i*2)) children();
-	cylinder($fn=60, d=chamfer_dia-(i*2), h=20, center=true);
+	cylinder(d=chamfer_dia-(i*2), h=20, center=true);
 	translate([0,0,-i*tan(chamfer_angle)]) //cylindrical_corner() children();
 	  rotate_extrude($fs=1,
-			 angle=90)
+			 angle=360)
 	  rotational_projection() cylindrical_corner() children();
       }
     }
   }
 
   module stepped_corner_2d(step=tp_chamfer_steps()){
-    rotate_extrude($fs=1, angle=90)
+    rotate_extrude($fs=.1, angle=360)
 
     for(i=[step:step:chamfer_d]){
       difference(){
@@ -138,25 +142,79 @@ module trackpoint_uniform_chamfer_helper(far=false, index=false, key_spacing, co
     }
   }
 
+ module sloped_corner_2d(step=tp_chamfer_steps()){
+    rotate_extrude($fs=.1, angle=360)
+
+    for(i=[0:step:chamfer_d]){
+      hull() {
+        difference(){
+          //translate([step, -step,.1]) cylindrical_corner(chamfer_dia-(i*2)) children();
+          translate([-(chamfer_dia/2-i),0.1]) square([step, 20]);
+          translate([0,-i*tan(chamfer_angle)]) //cylindrical_corner() children();
+            rotational_projection(step=1)
+            cylindrical_corner() children();
+        }
+        difference(){
+          //translate([step, -step,.1]) cylindrical_corner(chamfer_dia-(i*2)) children();
+          translate([-(chamfer_dia/2-i-step),0.1]) square([step, 20]);
+          translate([0,-(i+step)*tan(chamfer_angle)]) //cylindrical_corner() children();
+            rotational_projection(step=1)
+            cylindrical_corner() children();
+        }
+      }
+    }
+  }
+
+ module chamfered_corner_2d(step=tp_chamfer_steps()){
+   rotate_extrude($fs=.1, angle=360)
+
+     hull() {
+     difference(){
+       //translate([step, -step,.1]) cylindrical_corner(chamfer_dia-(i*2)) children();
+       translate([-(chamfer_dia/2),0.1]) square([step, 20]);
+       rotational_projection(step=1)
+         cylindrical_corner() children();
+     }
+     difference(){
+       //translate([step, -step,.1]) cylindrical_corner(chamfer_dia-(i*2)) children();
+       translate([-(chamfer_dia/2-chamfer_d),0.1]) square([step, 20]);
+       translate([0,-(chamfer_d)*tan(chamfer_angle)]) //cylindrical_corner() children();
+         rotational_projection(step=1)
+         cylindrical_corner() children();
+
+     }
+   }
+ }
 
     // put the keycap back when done
   decenter_keycap(reverse=true)
     union(){
     // model trackpoint
-    if($preview) {
+    *if($preview) {
       #let(h=3) {
-	cylinder($fn=60,h=h+.1,d=5.75);
-	translate([0,0,h]) cylinder($fn=60,h=1,d=rim_dia);
+        cylinder(h=h+.1,d=5.75);
+        translate([0,0,h]) cylinder(h=1,d=rim_dia);
       }
     }
 
-  *rotate_extrude($fs=.1,
-		 angle=90)
-    rotational_projection() cylindrical_corner() children();
+    *union() {
+      difference() {
+        sloped_corner_2d() children();
+        translate([-9.9,-10,0])cube([20,20,20], true);
+        translate([-9.9,15,0])cube([20,20,20], true);
+      }
+
+    //rotate_extrude($fs=.1, angle=90)
+      translate([0, -2,0])
+      mirror([1,0,0]) difference() {
+      rotational_projection() cylindrical_corner() children();
+      translate([-9.9,0,0])cube([20,20,20], true);
+    }
+    }
 
   *intersection() {
     decenter_keycap() children();
-    cylinder($fn=60, d=chamfer_dia, h=20, center=true);
+    cylinder(d=chamfer_dia, h=20, center=true);
   }
 
   //linear_extrude(.1)
@@ -169,20 +227,20 @@ module trackpoint_uniform_chamfer_helper(far=false, index=false, key_spacing, co
     }
 
   *rotate([-90,0,0])
-
     intersection() {
-      decenter_keycap() children();
-      cylinder($fn=60, d=chamfer_dia, h=20, center=true);
+        decenter_keycap() children();
+        cylinder(d=chamfer_dia, h=20, center=true);
     }
 
     difference() {
       decenter_keycap() children();
 
       // chamfer
-      rotate([0,0,-90]) stepped_corner_2d() children();
+      rotate([0,0,-90]) chamfered_corner_2d() children();
+      //rotate([0,0,-90]) sloped_corner_2d() children();
 
       // notch
-      cylinder($fn=60, d=base_dia,h=50,center=true);
+      cylinder(d=base_dia,h=50,center=true);
     }
   }
 
