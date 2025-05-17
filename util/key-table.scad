@@ -43,6 +43,14 @@ function is_lateral_key(key, table) =
   ? true
   : rootname[end] == "L" || rootname[end] == "R";
 
+function is_left_lateral_key(key, table) =
+  let(rootname = _root_keyname(key, table), end = len(rootname) - 1)
+  rootname[end] == "L";
+
+function is_right_lateral_key(key, table) =
+  let(rootname = _root_keyname(key, table), end = len(rootname) - 1)
+  rootname[end] == "R";
+
 function is_homing_key(key, table) =
   _mysearch(key, table, 6)
   ? true
@@ -67,6 +75,17 @@ function trackpoint_key_y(key, table) =
   : assert(false, str("not a trackpoint key: ", key));
 
 function pretrackpoint_key(key, table) = _detrackpoint_keyname(key, table);
+
+function is_thumb_key(key, table) =
+  key[0] == "T";
+
+function is_finger_key(key, table) =
+  key[0] == "R";
+
+function key_row(key, table) =
+  is_finger_key(key, table)
+  ? ord(key[1]) - ord("0")
+  : 1;
 
 // removes prefixes from a key name
 function _root_keyname(key, table) =
