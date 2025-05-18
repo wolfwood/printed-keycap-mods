@@ -54,7 +54,7 @@ module printable(noop=false) {
   if (noop) {
     children();
   } else {
-    rotate([0,0,fan_rotation]) rotate([-48.5,0,0]) rotate([0,0,-90]) children();
+    rotate([0,0,fan_rotation]) rotate([0,-48.5,0])  children();
   }
 }
 
