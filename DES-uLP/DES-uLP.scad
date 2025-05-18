@@ -2,6 +2,7 @@ use <../trackpoint_notch.scad>;
 include <../settings.scad>;
 use <../util/printable.scad>;
 use <../util/key-table.scad>;
+use <../util/marks.scad>;
 
 use <DES-bindings/unsculpted.scad>;
 use <DES-bindings/chord.scad>;
@@ -68,20 +69,54 @@ function lookup_width(type) =
   name2id_chord(type) >= 0 ? lookup_chord_width(type) :
   assert(false, str("invalid ", profile, " key type: ", type));
 
+function lookup_height(type) =
+  let(type = base_key(type, key_table))
+  name2id_unsculpted(type) >= 0 ? lookup_unsculpted_height(type) :
+  name2id_chord(type) >= 0 ? lookup_chord_height(type) :
+  assert(false, str("invalid ", profile, " key type: ", type));
+
+function lookup_topthickness(type) =
+  let(type = base_key(type, key_table))
+  name2id_unsculpted(type) >= 0 ? lookup_unsculpted_topthickness() :
+  name2id_chord(type) >= 0 ? lookup_chord_topthickness() :
+  assert(false, str("invalid ", profile, " key type: ", type));
+
+function lookup_top_width_diff(type) =
+  let(type = base_key(type, key_table))
+  name2id_unsculpted(type) >= 0 ? lookup_unsculpted_top_width_diff(type) :
+  name2id_chord(type) >= 0 ? lookup_chord_top_width_diff(type) :
+  assert(false, str("invalid ", profile, " key type: ", type));
+
 module printable(type, trim=true, noop=false, flip) {
+  width = lookup_width(type);
+  height = lookup_height(type);
+  top_width_diff = lookup_top_width_diff(type);
+  top = lookup_topthickness(type);
+  a = atan((height-top)/top_width_diff);
+
+  should_flip = is_undef(flip) ? flip_key(type, key_table) : flip;
+  row = key_row(type, key_table);
+
   _printable_choc(
                   // anywhere between 45 and 60 is reasonable, but I was happiest with 50 or 55
                   angle = 50,
                   surface_contact = 1.5,
                   surface_contact_stem = .75,
                   // add .89 for some reason?
-                  width = lookup_width(type) + 0.89,
+                  width = width + 0.89,
                   stem_depth = 1.4,
                   sculpt_compensate = lookup_sculpt(type),
                   type = type,
-                  flip = is_undef(flip) ? flip_key(type, key_table) : flip,
+                  flip = should_flip,
                   trim = trim,
                   noop = noop)
+    id_marks(marks = row,
+             width = width/2 -.4,
+             d = 0.5,
+             a=a,
+             z = 0.4,
+             left = !should_flip,
+             noop = noop)
     children();
 }
 

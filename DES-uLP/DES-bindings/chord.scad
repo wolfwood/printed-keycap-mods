@@ -27,5 +27,8 @@ module chord_key(key="R3", nohug=false, homing=false) {
 
 function lookup_chord_sculpt(key) = XAngleSkew(name2id_chord(key));
 function lookup_chord_width(key) = BottomWidth(name2id_chord(key));
+function lookup_chord_top_width_diff(key) = TopWidthDiff(name2id_chord(key));
+function lookup_chord_height(key) = KeyHeight(name2id_chord(key));
+function lookup_chord_topthickness() = topthickness();
 
 chord_key();

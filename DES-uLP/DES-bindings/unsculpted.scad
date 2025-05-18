@@ -27,5 +27,8 @@ module unsculpted_key(key="R3", homing=false) {
 
 function lookup_unsculpted_sculpt(key) = XAngleSkew(name2id_unsculpted(key));
 function lookup_unsculpted_width(key) = BottomWidth(name2id_unsculpted(key));
+function lookup_unsculpted_top_width_diff(key) = TopWidthDiff(name2id_unsculpted(key));
+function lookup_unsculpted_height(key) = KeyHeight(name2id_unsculpted(key));
+function lookup_unsculpted_topthickness() = topthickness();
 
 unsculpted_key();
