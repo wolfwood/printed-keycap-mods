@@ -3,12 +3,11 @@
 
 This code modifies and positions open source keycaps, such as Chicago Steno and DES, for FDM printing. It can also be used in cases where only model files, such as STLs are provided, as is the case with LPX.
 
-My twin goals are smooth, comfortable typing surfaces and the ability to use the keycaps right off the print bed; minimal post-processing, mainly popping off the supports.
+My twin goals are smooth, comfortable typing surfaces and the ability to use the keycaps right off the print bed; minimal post-processing is required, mainly popping off the supports.
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
 
-- [Print Keycaps That Feel Great](#print-keycaps-that-feel-great)
   - [Mods for Printing](#mods-for-printing)
   - [Modify Keycaps to Fit Around Trackpoint](#modify-keycaps-to-fit-around-trackpoint)
     - [Placement](#placement)
