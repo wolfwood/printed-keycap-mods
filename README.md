@@ -10,6 +10,10 @@ My twin goals are smooth, comfortable typing surfaces and the ability to use the
 
   - [Mods for Printing](#mods-for-printing)
   - [Modify Keycaps to Fit Around Trackpoint](#modify-keycaps-to-fit-around-trackpoint)
+    - [Notch Styles](#notch-styles)
+      - [No chamfer](#no-chamfer)
+      - [Uniform Depth Chamfer](#uniform-depth-chamfer)
+      - [Stair-Stepped Chamfer](#stair-stepped-chamfer)
     - [Placement](#placement)
   - [Stupid Stem Tricks](#stupid-stem-tricks)
     - [Stem Swap](#stem-swap)
@@ -45,9 +49,36 @@ Fourth, the sculpt of the key cap is compensated for when trimming, so that the 
 Finally, for DES-uLP, marks are added to identify the row and orientation of a keycap.
 
 ## Modify Keycaps to Fit Around Trackpoint
-![Chicago Steno around a Santoku trackpoint](images/santoku-fit.jpg)
 
-This code also takes keycaps and cuts notches to make room for a trackpoint's rubber dome. No need to grind them down. This can be done to match flat, staggered, or curved keyboards with standard MX or choc spacing or bespoke spacing. A number of preset spacings exist and it can be easily modified to accommodate any keyboard layout.
+No Chamfer | Stair-Stepped Chamfer | Uniform Depth Chamfer
+:---: | :---: | :---:
+<img src="images/santoku-fit.jpg" width="251"> | <img src="images/tp-chamfer.jpg" width="260"> | <img src="images/tp-uniform-2.jpg" width="260">
+
+<!--
+![none](images/santoku-fit.jpg) | ![stepped](images/tp-chamfer.jpg) | ![uniform](images/tp-uniform-2.jpg)
+-->
+
+<!--
+<div style="text-align: center;">
+<img src="images/santoku-fit.jpg" width="251">
+<img src="images/tp-chamfer.jpg" width="260"> <img src="images/tp-uniform-2.jpg" width="260">
+</div>
+-->
+
+This code can also cut notches in keycap models to make room for a trackpoint's rubber dome. No need to drill or grind them down. This can be done to match flat, staggered, or curved keyboards with standard MX or choc spacing or bespoke spacing. A number of preset spacings exist and it can be easily modified to accommodate any keyboard layout.
+
+### Notch Styles
+
+#### No chamfer
+The style of trackpoint notch is controlled in `settings.scad`. Setting `tp_chamfer() = false` will make a simple 9.7 mm hole that surrounds the trackpoint cap, as seen in the image above on the left (the gaps between keycaps are because this is an MX spaced board with choc keycaps). 
+
+Chamfered styles fit under the rim of the trackpoint cap, which both visually conceals the hole and prevents your finger from detecting an uncomfortable edge. I have implemented two approaches with some trade-offs.
+
+#### Uniform Depth Chamfer
+The image above on the right is with `tp_uniform_depth() = true` which finds the highest point on the keycap and removes material from that point in a cone. The resulting shape is not circular, but it is compact and intrudes less into the interior of the keycap, has a uniform depth that is less likely to create a thin spot in the keycap, and is fast to compute when prerendering is used. It also produces a smooth surface with compact geometry. Its computational overhead can be reduced by increasing `tp_rotational_steps()` (it defines step size, default 1 degree) with the accompanying risk that the highest point will not be detected and the chamfer will cut deeper into the keycap creating a lip.
+
+#### Stair-Stepped Chamfer
+The image in the middle is with `tp_uniform_depth() = false`. It lowers each point on the surface of the keycap by a fixed amount, which creates a circular notch that matches the style of Thinkpad keycaps. However, for keycaps that aren't flat, this means removing the same amount of material from high spots and low spots, which lowers the low spots by more than necessary. This can create very thin edges at the lip of the notch which are harder to print cleanly. Fortunately, they are covered by the rim of the trackpoint cap.  Finally, it can be very computationally and memory intensive, although prerendering makes dramatic improvements here as well, I recommend setting `function tp_chamfer() = $preview ? false : true;` to disable computing this chamfer during previews, which don't benefit from the parallel [manifold](https://github.com/elalish/manifold) backend. The resulting surface is stepped at a size controlled by `tp_chamfer_steps()` (again step size, default .05 mm). The steps are small enough to not be visible in the resulting print but to achieve this they add a lot of geometry to the model which increases file size and slicer load times.
 
 ### Placement
 Trackpoint keys are any regular key suffixed with a pair of cardinal directions, i.e. `-NW`, `-NE`, `-SW`, `-SE`. You can pick a different trackpoint placement by editing `TPKEYS` and, if your profile has chording/lateral keys that you use, `TPLATS` in the _Makefile_.
